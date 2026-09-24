@@ -25,8 +25,8 @@ const SERVERS = [
     recommended: true,
     url: (id, type, s, e) =>
       type === 'tv'
-        ? `https://embed.su/embed/tv/${id}/${s}/${e}`
-        : `https://embed.su/embed/movie/${id}`,
+        ? `https://111movies.com/tv/${id}/${s}/${e}`
+        : `https://111movies.com/movie/${id}`,
   },
   {
     label: 'Server 1',
@@ -152,14 +152,14 @@ export default function WatchPage() {
         </a>
 
         {/* Player */}
-        <div style={{ borderRadius: 20, overflow: 'hidden', marginBottom: 12, aspectRatio: "16/9", background: "#000", overflow: "hidden", background: '#000', boxShadow: '0 8px 40px rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.5)' }}>
+        <div style={{ borderRadius: 20, overflow: 'hidden', marginBottom: 12, position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden", background: "#000", background: '#000', boxShadow: '0 8px 40px rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.5)' }}>
           <iframe
             key={`${server}-${season}-${episode}`}
             src={SERVERS[server].url(id, film._type, season, episode)}
             title="Player"
             allowFullScreen
             allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-            style={{ width: "100%", height: "100%", border: "none", display: "block", objectFit: "cover" }}
+            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
           />
         </div>
 
