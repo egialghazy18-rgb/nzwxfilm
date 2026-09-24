@@ -42,41 +42,42 @@ export default async function HomePage() {
   return (
     <main style={{ minHeight: '100vh', background: '#dce8f5' }}>
 
-      {/* Hero + Glass Navbar */}
-      <div style={{ position: 'relative' }}>
-        <HeroSlider films={trending.slice(0, 5)} />
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0,
-          zIndex: 10,
-          padding: '52px 20px 16px',
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', marginBottom: 2 }}>Selamat datang di</p>
-              <h1 style={{ fontSize: 24, fontWeight: 900, color: '#fff', letterSpacing: '-0.5px' }}>
-                Nzwx<span style={{ color: '#90caf9' }}>Film</span>
-              </h1>
-            </div>
-            <a href="/search" style={{
-              width: 42, height: 42, borderRadius: 14,
-              background: 'rgba(255,255,255,0.15)',
-              border: '1.5px solid rgba(255,255,255,0.3)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-            }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
-            </a>
+      {/* Header glass - mirip MTix */}
+      <div style={{
+        background: 'rgba(255,255,255,0.15)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255,255,255,0.3)',
+        padding: '52px 20px 16px',
+        position: 'sticky', top: 0, zIndex: 50,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <p style={{ fontSize: 11, color: 'rgba(13,43,107,0.6)', marginBottom: 1 }}>Selamat datang di</p>
+            <h1 style={{ fontSize: 22, fontWeight: 900, color: '#0d2b6b', letterSpacing: '-0.5px' }}>
+              Nzwx<span style={{ color: '#1565c0' }}>Film</span>
+            </h1>
           </div>
+          <a href="/search" style={{
+            width: 42, height: 42, borderRadius: 14,
+            background: 'rgba(21,101,192,0.12)',
+            border: '1.5px solid rgba(21,101,192,0.25)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1565c0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </a>
         </div>
       </div>
 
+      {/* Hero Slider - poster portrait kayak MTix */}
+      <div style={{ padding: '20px 0 8px' }}>
+        <HeroSlider films={trending.slice(0, 6)} />
+      </div>
+
       {/* Categories */}
-      <div style={{ padding: '20px 16px' }}>
+      <div style={{ padding: '12px 16px 20px' }}>
         <div style={{
           background: 'rgba(255,255,255,0.8)',
           backdropFilter: 'blur(20px)',
