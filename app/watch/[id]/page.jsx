@@ -21,6 +21,14 @@ const selectStyle = {
 
 const SERVERS = [
   {
+    label: 'HD Premium',
+    recommended: true,
+    url: (id, type, s, e) =>
+      type === 'tv'
+        ? `https://player.autoembed.cc/embed/tv/${id}/${s}/${e}`
+        : `https://player.autoembed.cc/embed/movie/${id}`,
+  },
+  {
     label: 'Server 1',
     url: (id, type, s, e) =>
       type === 'tv'
@@ -107,9 +115,8 @@ export default function WatchPage() {
   if (error) return (
     <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#dce8f5' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 48, marginBottom: 12 }}>😕</div>
-        <p style={{ color: '#1565c0', fontWeight: 600 }}>{error}</p>
-        <a href="/" style={{ display: 'inline-block', marginTop: 16, padding: '10px 24px', background: '#1565c0', color: '#fff', borderRadius: 100, fontWeight: 600, fontSize: 13 }}>Kembali</a>
+        <p style={{ color: '#1565c0', fontWeight: 600, marginBottom: 16 }}>{error}</p>
+        <a href="/" style={{ padding: '10px 24px', background: '#1565c0', color: '#fff', borderRadius: 100, fontWeight: 600, fontSize: 13 }}>Kembali</a>
       </div>
     </main>
   );
@@ -157,16 +164,43 @@ export default function WatchPage() {
         </div>
 
         {/* Server */}
-        <div style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)', borderRadius: 16, padding: '12px 14px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 10, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: '#78909c' }}>Server:</span>
-          {SERVERS.map((s, i) => (
-            <button key={i} onClick={() => setServer(i)} style={{ padding: '7px 16px', borderRadius: 100, cursor: 'pointer', fontWeight: 600, fontSize: 12, background: server === i ? '#1565c0' : 'rgba(21,101,192,0.08)', color: server === i ? '#fff' : '#1565c0', border: server === i ? '1.5px solid #1565c0' : '1.5px solid rgba(21,101,192,0.2)', transition: 'all 0.2s', fontFamily: 'Inter, sans-serif' }}>{s.label}</button>
-          ))}
+        <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', borderRadius: 16, padding: '14px 16px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#78909c', letterSpacing: '0.5px', marginBottom: 10 }}>PILIH SERVER</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {SERVERS.map((s, i) => (
+              <button key={i} onClick={() => setServer(i)} style={{
+                padding: '8px 16px', borderRadius: 100, cursor: 'pointer',
+                fontWeight: 700, fontSize: 12,
+                background: server === i ? '#1565c0' : 'rgba(21,101,192,0.07)',
+                color: server === i ? '#fff' : '#1565c0',
+                border: server === i ? '1.5px solid #1565c0' : '1.5px solid rgba(21,101,192,0.2)',
+                transition: 'all 0.2s', fontFamily: 'Inter, sans-serif',
+                display: 'flex', alignItems: 'center', gap: 5,
+              }}>
+                {s.recommended && (
+                  <span style={{
+                    background: server === i ? 'rgba(255,255,255,0.25)' : '#1565c0',
+                    color: server === i ? '#fff' : '#fff',
+                    fontSize: 9, fontWeight: 800,
+                    padding: '1px 6px', borderRadius: 100,
+                    letterSpacing: '0.3px',
+                  }}>HD</span>
+                )}
+                {s.label}
+              </button>
+            ))}
+          </div>
+          {SERVERS[server].recommended && (
+            <div style={{ marginTop: 10, fontSize: 11, color: '#1565c0', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Kualitas terbaik, tanpa watermark, direkomendasikan
+            </div>
+          )}
         </div>
 
         {/* Season & Episode */}
         {isTV && (
-          <div style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)', borderRadius: 16, padding: '12px 14px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 10, display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', borderRadius: 16, padding: '12px 16px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 10, display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
             <span style={{ fontSize: 12, fontWeight: 600, color: '#78909c' }}>Pilih:</span>
             <select value={season} onChange={e => { setSeason(Number(e.target.value)); setEpisode(1); }} style={selectStyle}>
               {(film.seasons || []).filter(s => s.season_number > 0).map(s => (
@@ -182,12 +216,13 @@ export default function WatchPage() {
         )}
 
         {/* Info */}
-        <div style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '20px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 12 }}>
+        <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '20px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 12 }}>
           <h1 style={{ fontSize: 'clamp(18px,3vw,26px)', fontWeight: 800, color: '#1a237e', marginBottom: 10, letterSpacing: '-0.3px' }}>{title}</h1>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
             {date && <span style={{ background: 'rgba(21,101,192,0.1)', border: '1px solid rgba(21,101,192,0.2)', borderRadius: 100, padding: '3px 12px', fontSize: 12, color: '#1565c0', fontWeight: 600 }}>{date.slice(0, 4)}</span>}
             <span style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 100, padding: '3px 12px', fontSize: 12, color: '#b45309', fontWeight: 600 }}>★ {film.vote_average?.toFixed(1)}</span>
             {runtime > 0 && <span style={{ background: 'rgba(0,0,0,0.05)', borderRadius: 100, padding: '3px 12px', fontSize: 12, color: '#546e7a' }}>{Math.floor(runtime / 60)}j {runtime % 60}m</span>}
+            {isTV && <span style={{ background: 'rgba(13,71,161,0.1)', borderRadius: 100, padding: '3px 12px', fontSize: 12, color: '#0d47a1', fontWeight: 600 }}>SERIES</span>}
           </div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
             {film.genres?.map(g => (
@@ -199,7 +234,7 @@ export default function WatchPage() {
 
         {/* Cast */}
         {film.credits?.cast?.length > 0 && (
-          <div style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '20px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 12 }}>
+          <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '20px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 12 }}>
             <h3 style={{ fontSize: 13, fontWeight: 700, color: '#1a237e', marginBottom: 14 }}>Pemeran</h3>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {film.credits.cast.slice(0, 8).map(a => (
@@ -219,7 +254,7 @@ export default function WatchPage() {
 
         {/* Similar */}
         {similar.length > 0 && (
-          <div style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '20px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+          <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '20px', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
             <h2 style={{ fontSize: 15, fontWeight: 700, color: '#1a237e', marginBottom: 14 }}>{isTV ? 'Series Serupa' : 'Film Serupa'}</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 10 }}>
               {similar.map(f => (
