@@ -5,17 +5,16 @@ const KEY = '3a3f8986432b380633bf9670f5fff60a';
 const IMG = 'https://image.tmdb.org/t/p/w500';
 const IMG_BIG = 'https://image.tmdb.org/t/p/original';
 
-const EMBEDS = [
-  (id) => `/player?src=https://vidsrc.sh/embed/movie?tmdb=${id}`,
-  (id) => `https://www.2embed.cc/embed/${id}`,
-  (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
+const SERVERS = [
+  { label: 'Server 1', url: (id) => `https://vidsrc.sh/embed/movie?tmdb=${id}` },
+  { label: 'Server 2', url: (id) => `https://www.2embed.cc/embed/${id}` },
+  { label: 'Server 3', url: (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1` },
 ];
 
 export default function WatchPage({ params }) {
   const { id } = params;
   const [film, setFilm] = useState(null);
   const [similar, setSimilar] = useState([]);
-  const [embedIdx, setEmbedIdx] = useState(0);
 
   useEffect(() => {
     async function load() {
@@ -39,34 +38,46 @@ export default function WatchPage({ params }) {
   );
 
   return (
-    <main style={{minHeight:'100vh',paddingTop:72,position:'relative',zIndex:1,background:'#0a0a0f'}}>
+    <main style={{minHeight:'100vh',paddingTop:72,background:'#0a0a0f',position:'relative'}}>
       {film.backdrop_path && (
-        <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,backgroundImage:`url(${IMG_BIG}${film.backdrop_path})`,backgroundSize:'cover',backgroundPosition:'center',opacity:0.06,zIndex:0,pointerEvents:'none'}} />
+        <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,backgroundImage:`url(${IMG_BIG}${film.backdrop_path})`,backgroundSize:'cover',backgroundPosition:'center',opacity:0.08,zIndex:0,pointerEvents:'none'}} />
       )}
-      <div style={{maxWidth:1280,margin:'0 auto',padding:'24px 24px 80px',position:'relative',zIndex:1}}>
+      <div style={{maxWidth:900,margin:'0 auto',padding:'24px 20px 80px',position:'relative',zIndex:1}}>
 
-        <div style={{borderRadius:16,overflow:'hidden',border:'1px solid rgba(255,255,255,0.07)',marginBottom:16,background:'#000',boxShadow:'0 24px 80px rgba(0,0,0,0.6)',aspectRatio:'16/9'}}>
-          <iframe
-            key={embedIdx}
-            src={EMBEDS[embedIdx](id)}
-            style={{width:'100%',height:'100%',border:'none',display:'block'}}
-            allowFullScreen
-            allow="autoplay; fullscreen"
-          />
+        {/* Thumbnail + Play */}
+        <div style={{position:'relative',borderRadius:16,overflow:'hidden',marginBottom:20,aspectRatio:'16/9',background:'#111'}}>
+          {film.backdrop_path && (
+            <img src={`${IMG_BIG}${film.backdrop_path}`} alt={film.title} style={{width:'100%',height:'100%',objectFit:'cover',opacity:0.6}} />
+          )}
+          <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16}}>
+            <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',marginBottom:4}}>Pilih server untuk menonton</div>
+            <div style={{display:'flex',gap:10,flexWrap:'wrap',justifyContent:'center'}}>
+              {SERVERS.map((s, i) => (
+                <a
+                  key={i}
+                  href={s.url(id)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display:'flex',alignItems:'center',gap:8,
+                    padding:'10px 20px',borderRadius:100,
+                    background: i===0 ? 'rgba(0,229,255,0.9)' : 'rgba(255,255,255,0.15)',
+                    color: i===0 ? '#000' : '#fff',
+                    fontWeight:700,fontSize:13,textDecoration:'none',
+                    backdropFilter:'blur(8px)',
+                    border: i===0 ? 'none' : '1px solid rgba(255,255,255,0.2)',
+                  }}
+                >
+                  {i===0 && <span>▶</span>}
+                  {s.label}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div style={{display:'flex',gap:8,marginBottom:32,flexWrap:'wrap'}}>
-          {EMBEDS.map((_, i) => (
-            <button key={i} onClick={() => setEmbedIdx(i)} style={{
-              padding:'6px 16px',fontSize:12,fontWeight:600,borderRadius:100,cursor:'pointer',
-              background: embedIdx===i ? 'rgba(0,229,255,0.15)' : 'rgba(255,255,255,0.05)',
-              color: embedIdx===i ? '#00e5ff' : '#6b7280',
-              border: embedIdx===i ? '1px solid rgba(0,229,255,0.3)' : '1px solid rgba(255,255,255,0.08)',
-            }}>Server {i+1}</button>
-          ))}
-        </div>
-
-        <h1 style={{fontFamily:'Outfit,sans-serif',fontSize:'clamp(22px,3vw,36px)',fontWeight:700,letterSpacing:'-0.03em',color:'#e8eaf6',marginBottom:12}}>{film.title}</h1>
+        {/* Info */}
+        <h1 style={{fontFamily:'Outfit,sans-serif',fontSize:'clamp(20px,3vw,32px)',fontWeight:700,color:'#e8eaf6',marginBottom:12}}>{film.title}</h1>
 
         <div style={{display:'flex',gap:10,alignItems:'center',marginBottom:16,flexWrap:'wrap'}}>
           <span style={{background:'rgba(0,229,255,0.1)',border:'1px solid rgba(0,229,255,0.25)',borderRadius:100,padding:'3px 12px',fontSize:12,color:'#00e5ff',fontWeight:500}}>{film.release_date?.slice(0,4)}</span>
@@ -104,7 +115,7 @@ export default function WatchPage({ params }) {
         {similar.length > 0 && (
           <div>
             <h2 style={{fontFamily:'Outfit,sans-serif',fontSize:18,fontWeight:700,color:'#e8eaf6',marginBottom:16}}>Film Serupa</h2>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:14}}>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))',gap:12}}>
               {similar.map(f => (
                 <a key={f.id} href={`/watch/${f.id}`} style={{textDecoration:'none'}}>
                   <div style={{borderRadius:10,overflow:'hidden',border:'1px solid rgba(255,255,255,0.07)'}}>
