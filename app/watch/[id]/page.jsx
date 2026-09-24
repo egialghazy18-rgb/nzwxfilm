@@ -1,24 +1,81 @@
+'use client';
+import { useEffect, useState } from 'react';
+
 const KEY = '3a3f8986432b380633bf9670f5fff60a';
 const IMG = 'https://image.tmdb.org/t/p/w500';
 const IMG_BIG = 'https://image.tmdb.org/t/p/original';
 
-export default async function WatchPage({ params }) {
+const EMBEDS = [
+  (id) => `https://vidsrc.me/embed/movie?tmdb=${id}`,
+  (id) => `https://www.2embed.cc/embed/${id}`,
+  (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
+];
+
+export default function WatchPage({ params }) {
   const { id } = params;
-  const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${KEY}&language=id-ID&append_to_response=credits,similar`,{next:{revalidate:3600}});
-  const film = await res.json();
-  const similar = film.similar?.results?.slice(0,6) || [];
-  const embedUrl = `https://vidsrc.to/embed/movie/${id}`;
+  const [film, setFilm] = useState(null);
+  const [similar, setSimilar] = useState([]);
+  const [embedIdx, setEmbedIdx] = useState(0);
+
+  useEffect(() => {
+    async function load() {
+      // Fetch bahasa Indonesia dulu
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${KEY}&language=id-ID&append_to_response=credits,similar`);
+      const data = await res.json();
+
+      // Kalau sinopsis kosong, fetch ulang pakai en-US
+      if (!data.overview) {
+        const res2 = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${KEY}&language=en-US&append_to_response=credits,similar`);
+        const data2 = await res2.json();
+        data.overview = data2.overview;
+      }
+
+      setFilm(data);
+      setSimilar(data.similar?.results?.slice(0, 6) || []);
+    }
+    load();
+  }, [id]);
+
+  if (!film) return (
+    <main style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#0a0a0f'}}>
+      <div style={{color:'#6b7280',fontSize:14}}>Memuat...</div>
+    </main>
+  );
 
   return (
-    <main style={{minHeight:'100vh',paddingTop:72,position:'relative',zIndex:1}}>
+    <main style={{minHeight:'100vh',paddingTop:72,position:'relative',zIndex:1,background:'#0a0a0f'}}>
       {film.backdrop_path && (
         <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,backgroundImage:`url(${IMG_BIG}${film.backdrop_path})`,backgroundSize:'cover',backgroundPosition:'center',opacity:0.06,zIndex:0,pointerEvents:'none'}} />
       )}
       <div style={{maxWidth:1280,margin:'0 auto',padding:'24px 24px 80px',position:'relative',zIndex:1}}>
 
         {/* Player */}
-        <div style={{borderRadius:16,overflow:'hidden',border:'1px solid rgba(255,255,255,0.07)',marginBottom:32,background:'#000',boxShadow:'0 24px 80px rgba(0,0,0,0.6)',aspectRatio:'16/9'}}>
-          <iframe src={embedUrl} style={{width:'100%',height:'100%',border:'none',display:'block'}} allowFullScreen allow="autoplay; fullscreen" />
+        <div style={{borderRadius:16,overflow:'hidden',border:'1px solid rgba(255,255,255,0.07)',marginBottom:16,background:'#000',boxShadow:'0 24px 80px rgba(0,0,0,0.6)',aspectRatio:'16/9'}}>
+          <iframe
+            key={embedIdx}
+            src={EMBEDS[embedIdx](id)}
+            style={{width:'100%',height:'100%',border:'none',display:'block'}}
+            allowFullScreen
+            allow="autoplay; fullscreen"
+          />
+        </div>
+
+        {/* Tombol ganti source */}
+        <div style={{display:'flex',gap:8,marginBottom:32,flexWrap:'wrap'}}>
+          {EMBEDS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setEmbedIdx(i)}
+              style={{
+                padding:'6px 16px',fontSize:12,fontWeight:600,borderRadius:100,border:'none',cursor:'pointer',
+                background: embedIdx === i ? 'rgba(0,229,255,0.15)' : 'rgba(255,255,255,0.05)',
+                color: embedIdx === i ? '#00e5ff' : '#6b7280',
+                border: embedIdx === i ? '1px solid rgba(0,229,255,0.3)' : '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              Server {i + 1}
+            </button>
+          ))}
         </div>
 
         {/* Info */}
@@ -64,7 +121,7 @@ export default async function WatchPage({ params }) {
             <h2 style={{fontFamily:'Outfit,sans-serif',fontSize:18,fontWeight:700,color:'#e8eaf6',marginBottom:16}}>Film Serupa</h2>
             <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:14}}>
               {similar.map(f => (
-                <a key={f.id} href={`/watch/${f.id}`}>
+                <a key={f.id} href={`/watch/${f.id}`} style={{textDecoration:'none'}}>
                   <div style={{borderRadius:10,overflow:'hidden',border:'1px solid rgba(255,255,255,0.07)'}}>
                     {f.poster_path && <img src={`${IMG}${f.poster_path}`} alt={f.title} style={{width:'100%',aspectRatio:'2/3',objectFit:'cover',display:'block'}} />}
                     <div style={{padding:'8px 10px',background:'rgba(255,255,255,0.03)'}}>
