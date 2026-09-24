@@ -6,7 +6,7 @@ const IMG = 'https://image.tmdb.org/t/p/w500';
 const IMG_BIG = 'https://image.tmdb.org/t/p/original';
 
 const EMBEDS = [
-  (id) => `https://vidsrc.sh/embed/movie?tmdb=${id}`,
+  (id) => `/player?src=https://vidsrc.sh/embed/movie?tmdb=${id}`,
   (id) => `https://www.2embed.cc/embed/${id}`,
   (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
 ];
