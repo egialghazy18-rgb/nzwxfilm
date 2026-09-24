@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "./components/Navbar";
+import BottomNav from "./components/BottomNav";
 
 export const metadata: Metadata = {
-  title: "NzwxFilm — Nonton Film & Series",
-  description: "Nonton film dan series favorit kamu secara gratis",
+  title: "NzwxFilm",
+  description: "Nonton film dan series favorit kamu",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
       <body>
-        <Navbar />
         {children}
+        <BottomNav />
       </body>
     </html>
   );
