@@ -7,7 +7,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "frame-src 'self' https://vidsrc.me https://vidsrc.to https://www.2embed.cc https://multiembed.mov https://embed.su https://player.autoembed.cc;",
+            value: "frame-src 'self' https://vidsrc.sh https://www.2embed.cc https://multiembed.mov;",
           },
         ],
       },

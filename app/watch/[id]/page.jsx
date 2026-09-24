@@ -6,7 +6,7 @@ const IMG = 'https://image.tmdb.org/t/p/w500';
 const IMG_BIG = 'https://image.tmdb.org/t/p/original';
 
 const EMBEDS = [
-  (id) => `https://vidsrc.me/embed/movie?tmdb=${id}`,
+  (id) => `https://vidsrc.sh/embed/movie?tmdb=${id}`,
   (id) => `https://www.2embed.cc/embed/${id}`,
   (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
 ];
@@ -19,17 +19,13 @@ export default function WatchPage({ params }) {
 
   useEffect(() => {
     async function load() {
-      // Fetch bahasa Indonesia dulu
       const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${KEY}&language=id-ID&append_to_response=credits,similar`);
       const data = await res.json();
-
-      // Kalau sinopsis kosong, fetch ulang pakai en-US
       if (!data.overview) {
         const res2 = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${KEY}&language=en-US&append_to_response=credits,similar`);
         const data2 = await res2.json();
         data.overview = data2.overview;
       }
-
       setFilm(data);
       setSimilar(data.similar?.results?.slice(0, 6) || []);
     }
@@ -49,7 +45,6 @@ export default function WatchPage({ params }) {
       )}
       <div style={{maxWidth:1280,margin:'0 auto',padding:'24px 24px 80px',position:'relative',zIndex:1}}>
 
-        {/* Player */}
         <div style={{borderRadius:16,overflow:'hidden',border:'1px solid rgba(255,255,255,0.07)',marginBottom:16,background:'#000',boxShadow:'0 24px 80px rgba(0,0,0,0.6)',aspectRatio:'16/9'}}>
           <iframe
             key={embedIdx}
@@ -60,25 +55,17 @@ export default function WatchPage({ params }) {
           />
         </div>
 
-        {/* Tombol ganti source */}
         <div style={{display:'flex',gap:8,marginBottom:32,flexWrap:'wrap'}}>
           {EMBEDS.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setEmbedIdx(i)}
-              style={{
-                padding:'6px 16px',fontSize:12,fontWeight:600,borderRadius:100,border:'none',cursor:'pointer',
-                background: embedIdx === i ? 'rgba(0,229,255,0.15)' : 'rgba(255,255,255,0.05)',
-                color: embedIdx === i ? '#00e5ff' : '#6b7280',
-                border: embedIdx === i ? '1px solid rgba(0,229,255,0.3)' : '1px solid rgba(255,255,255,0.08)',
-              }}
-            >
-              Server {i + 1}
-            </button>
+            <button key={i} onClick={() => setEmbedIdx(i)} style={{
+              padding:'6px 16px',fontSize:12,fontWeight:600,borderRadius:100,cursor:'pointer',
+              background: embedIdx===i ? 'rgba(0,229,255,0.15)' : 'rgba(255,255,255,0.05)',
+              color: embedIdx===i ? '#00e5ff' : '#6b7280',
+              border: embedIdx===i ? '1px solid rgba(0,229,255,0.3)' : '1px solid rgba(255,255,255,0.08)',
+            }}>Server {i+1}</button>
           ))}
         </div>
 
-        {/* Info */}
         <h1 style={{fontFamily:'Outfit,sans-serif',fontSize:'clamp(22px,3vw,36px)',fontWeight:700,letterSpacing:'-0.03em',color:'#e8eaf6',marginBottom:12}}>{film.title}</h1>
 
         <div style={{display:'flex',gap:10,alignItems:'center',marginBottom:16,flexWrap:'wrap'}}>
@@ -95,7 +82,6 @@ export default function WatchPage({ params }) {
 
         <p style={{fontSize:14,lineHeight:1.75,color:'#9ca3af',maxWidth:680,marginBottom:40}}>{film.overview || 'Sinopsis tidak tersedia.'}</p>
 
-        {/* Cast */}
         {film.credits?.cast?.length > 0 && (
           <div style={{marginBottom:40}}>
             <h3 style={{fontSize:11,fontWeight:600,color:'#6b7280',letterSpacing:'0.05em',textTransform:'uppercase',marginBottom:14}}>PEMERAN</h3>
@@ -115,7 +101,6 @@ export default function WatchPage({ params }) {
           </div>
         )}
 
-        {/* Similar */}
         {similar.length > 0 && (
           <div>
             <h2 style={{fontFamily:'Outfit,sans-serif',fontSize:18,fontWeight:700,color:'#e8eaf6',marginBottom:16}}>Film Serupa</h2>
