@@ -1,5 +1,6 @@
-export default function PlayerPage({ searchParams }) {
-  const { src } = searchParams;
+export default async function PlayerPage({ searchParams }) {
+  const params = await searchParams;
+  const src = params?.src;
   if (!src) return <div>No source</div>;
   return (
     <html>
