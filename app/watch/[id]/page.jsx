@@ -25,8 +25,8 @@ const SERVERS = [
     recommended: true,
     url: (id, type, s, e) =>
       type === 'tv'
-        ? `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
-        : `https://vidsrc.xyz/embed/movie?tmdb=${id}`,
+        ? `https://embed.su/embed/tv/${id}/${s}/${e}`
+        : `https://embed.su/embed/movie/${id}`,
   },
   {
     label: 'Server 1',
@@ -152,7 +152,7 @@ export default function WatchPage() {
         </a>
 
         {/* Player */}
-        <div style={{ borderRadius: 20, overflow: 'hidden', marginBottom: 12, aspectRatio: "16/9", background: "#000", background: '#000', boxShadow: '0 8px 40px rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.5)' }}>
+        <div style={{ borderRadius: 20, overflow: 'hidden', marginBottom: 12, aspectRatio: "16/9", background: "#000", overflow: "hidden", background: '#000', boxShadow: '0 8px 40px rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.5)' }}>
           <iframe
             key={`${server}-${season}-${episode}`}
             src={SERVERS[server].url(id, film._type, season, episode)}
