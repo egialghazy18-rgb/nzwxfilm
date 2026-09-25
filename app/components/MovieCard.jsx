@@ -4,11 +4,7 @@ import Link from 'next/link';
 export default function MovieCard({ film }) {
   return (
     <Link href={`/watch/${film.id}`} style={{ display: 'block', textDecoration: 'none' }}>
-      <div
-        style={{ borderRadius: 16, overflow: 'hidden', position: 'relative', aspectRatio: '2/3', background: '#1a1a2e', transition: 'transform 0.25s ease, box-shadow 0.25s ease', cursor: 'pointer' }}
-        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px) scale(1.02)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(21,101,192,0.45)'; }}
-        onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
-      >
+      <div style={{ borderRadius: 16, overflow: 'hidden', position: 'relative', aspectRatio: '2/3', background: '#1a1a2e' }}>
         {film.poster
           ? <img src={film.poster} alt={film.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" />
           : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>🎬</div>
