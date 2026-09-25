@@ -16,9 +16,14 @@ export const getPopular = (page=1) => tmdb('/movie/popular',{page});
 export const getTrending = () => tmdb('/trending/movie/week');
 export const getTopRated = (page=1) => tmdb('/movie/top_rated',{page});
 export const searchMovies = (query,page=1) => tmdb('/search/movie',{query,page});
+export const searchTV = (query,page=1) => tmdb('/search/tv',{query,page});
 export const getMovieDetail = (id) => tmdb(`/movie/${id}`,{append_to_response:'credits,videos,similar'});
 export const getPopularSeries = (page=1) => tmdb('/tv/popular',{page});
 export const getTrendingSeries = () => tmdb('/trending/tv/week');
+export const getMovieGenres = () => tmdb('/genre/movie/list');
+export const getTVGenres = () => tmdb('/genre/tv/list');
+export const discoverMovies = (params={}) => tmdb('/discover/movie', params);
+export const discoverTV = (params={}) => tmdb('/discover/tv', params);
 
 export function fmt(f) {
   return {
