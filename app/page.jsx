@@ -1,6 +1,7 @@
 import { getTrending, getTrendingSeries, getPopular, getPopularSeries, fmt } from './lib/tmdb';
 import MovieCard from './components/MovieCard';
 import HeroSlider from './components/HeroSlider';
+import BannerSlider from './components/BannerSlider';
 
 function CategoryIcon({ icon, label, href }) {
   return (
@@ -71,8 +72,8 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Hero Slider - poster portrait kayak MTix */}
-      <div style={{ padding: '20px 0 8px' }}>
+      <BannerSlider films={trending.slice(0, 8)} />
+      <div style={{ padding: '8px 0 4px' }}>
         <HeroSlider films={trending.slice(0, 10)} />
       </div>
 
