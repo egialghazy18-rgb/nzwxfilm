@@ -1,4 +1,4 @@
-import { getTrending, getPopular, getPopularSeries, fmt } from './lib/tmdb';
+import { getTrending, getTrendingSeries, getPopular, getPopularSeries, fmt } from './lib/tmdb';
 import MovieCard from './components/MovieCard';
 import HeroSlider from './components/HeroSlider';
 
@@ -34,8 +34,8 @@ function Section({ title, items, href }) {
 }
 
 export default async function HomePage() {
-  const [t, m, s] = await Promise.all([getTrending(), getPopular(), getPopularSeries()]);
-  const trending = (t.results || []).map(fmt);
+  const [t, ts, m, s] = await Promise.all([getTrending(), getTrendingSeries(), getPopular(), getPopularSeries()]);
+  const trending = [...(t.results || []).map(fmt), ...(ts.results || []).map(fmt)].slice(0, 10);
   const movies = (m.results || []).map(fmt);
   const series = (s.results || []).map(fmt);
 
