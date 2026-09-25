@@ -34,8 +34,8 @@ export default function NowPlaying({ films }) {
         opacity: 0.5,
         transition: 'opacity 0.8s ease',
         pointerEvents: 'none',
-        maskImage: 'radial-gradient(ellipse 120% 100% at 50% 50%, black 10%, transparent 70%)',
-        WebkitMaskImage: 'radial-gradient(ellipse 120% 100% at 50% 50%, black 10%, transparent 70%)',
+        maskImage: 'radial-gradient(ellipse 100% 90% at 50% 50%, black 0%, transparent 60%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 100% 90% at 50% 50%, black 0%, transparent 60%)',
       }} />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
