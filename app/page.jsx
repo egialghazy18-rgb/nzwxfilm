@@ -15,7 +15,7 @@ function Section({ title, items, href }) {
   return (
     <section style={{ marginBottom: 32, padding: '0 16px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-        <h2 style={{ fontSize: 17, fontWeight: 800, color: '#1a237e', letterSpacing: '-0.3px', paddingLeft: 12, borderLeft: '4px solid #1565c0', borderRadius: 2 }}>{title}</h2>
+        <h2 style={{ fontSize: 17, fontWeight: 800, color: '#fff', letterSpacing: '-0.3px', paddingLeft: 12, borderLeft: '4px solid #4fc3f7', borderRadius: 2 }}>{title}</h2>
         {href && <a href={href} style={{ fontSize: 12, color: '#1565c0', fontWeight: 600 }}>Lihat Semua →</a>}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12 }}>
