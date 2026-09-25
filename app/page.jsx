@@ -73,7 +73,7 @@ export default async function HomePage() {
 
       {/* Hero Slider - poster portrait kayak MTix */}
       <div style={{ padding: '20px 0 8px' }}>
-        <HeroSlider films={trending.slice(0, 6)} />
+        <HeroSlider films={trending.slice(0, 10)} />
       </div>
 
       {/* Categories */}
