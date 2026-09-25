@@ -1,6 +1,5 @@
 import { getTrending, getTrendingSeries, getPopular, getPopularSeries, fmt } from './lib/tmdb';
 import MovieCard from './components/MovieCard';
-import HeroSlider from './components/HeroSlider';
 import BannerSlider from './components/BannerSlider';
 
 function CategoryIcon({ icon, label, href }) {
@@ -27,7 +26,7 @@ function Section({ title, items, href }) {
           <a href={href} style={{ fontSize: 12, color: '#1565c0', fontWeight: 600, background: 'rgba(21,101,192,0.1)', padding: '4px 12px', borderRadius: 100 }}>Lihat Semua</a>
         )}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12, padding: '0 16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, padding: '0 16px' }}>
         {items.slice(0, 20).map(f => <MovieCard key={f.id} film={f} />)}
       </div>
     </section>
@@ -73,9 +72,6 @@ export default async function HomePage() {
       </div>
 
       <BannerSlider films={trending.slice(0, 8)} />
-      <div style={{ padding: '8px 0 4px' }}>
-        <HeroSlider films={trending.slice(0, 10)} />
-      </div>
 
       {/* Categories */}
       <div style={{ padding: '12px 16px 20px' }}>
