@@ -30,10 +30,10 @@ export default function NowPlaying({ films }) {
         position: 'absolute', inset: 0, zIndex: 0,
         backgroundImage: `url(${films[active]?.poster})`,
         backgroundSize: 'cover', backgroundPosition: 'center',
-        filter: 'blur(60px) saturate(2.5)',
-        opacity: 0.3,
-        transition: 'opacity 0.6s ease',
-        transform: 'scale(1.2)',
+        filter: 'blur(40px) saturate(4) brightness(1.3)',
+        opacity: 0.6,
+        transition: 'background-image 0.8s ease, opacity 0.8s ease',
+        transform: 'scale(1.4)',
         pointerEvents: 'none',
       }} />
 
