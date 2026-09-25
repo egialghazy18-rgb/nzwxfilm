@@ -72,18 +72,7 @@ export default async function HomePage() {
       </div>
 
       <BannerSlider films={trending.slice(0, 8)} />
-      <div style={{ overflowX: 'auto', display: 'flex', gap: 12, padding: '16px 16px 4px', scrollbarWidth: 'none' }}>
-        {trending.slice(0, 10).map(film => (
-          <a key={film.id} href={`/watch/${film.id}`} style={{ flex: '0 0 160px', borderRadius: 16, overflow: 'hidden', position: 'relative', aspectRatio: '2/3', display: 'block', boxShadow: '0 4px 16px rgba(0,0,0,0.2)', textDecoration: 'none', flexShrink: 0 }}>
-            <img src={film.poster} alt={film.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%)' }} />
-            <div style={{ position: 'absolute', bottom: 8, left: 8, right: 8 }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: '#fff', lineHeight: 1.3 }}>{film.title}</p>
-              <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)' }}>★ {film.rating?.toFixed(1)}</p>
-            </div>
-          </a>
-        ))}
-      </div>
+
 
       {/* Categories */}
       <div style={{ padding: '12px 16px 20px' }}>
@@ -103,6 +92,23 @@ export default async function HomePage() {
         </div>
       </div>
 
+      <div style={{ marginBottom: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, padding: '0 16px' }}>
+          <h2 style={{ fontSize: 17, fontWeight: 800, color: '#1a237e', letterSpacing: '-0.3px' }}>Now Playing</h2>
+        </div>
+        <div style={{ overflowX: 'auto', display: 'flex', gap: 12, padding: '0 16px 8px', scrollbarWidth: 'none' }}>
+          {trending.slice(0, 10).map(film => (
+            <a key={film.id} href={`/watch/${film.id}`} style={{ flex: '0 0 160px', borderRadius: 16, overflow: 'hidden', position: 'relative', aspectRatio: '2/3', display: 'block', boxShadow: '0 4px 16px rgba(0,0,0,0.2)', textDecoration: 'none', flexShrink: 0 }}>
+              <img src={film.poster} alt={film.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%)' }} />
+              <div style={{ position: 'absolute', bottom: 8, left: 8, right: 8 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: '#fff', lineHeight: 1.3 }}>{film.title}</p>
+                <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)' }}>★ {film.rating?.toFixed(1)}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
       <Section title="Trending" items={trending} href="/trending" />
       <Section title="Film Populer" items={movies} href="/movies" />
       <Section title="Series Populer" items={series} href="/series" />
