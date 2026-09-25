@@ -25,8 +25,8 @@ const SERVERS = [
     recommended: true,
     url: (id, type, s, e) =>
       type === 'tv'
-        ? `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
-        : `https://vidsrc.xyz/embed/movie?tmdb=${id}`,
+        ? `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`
+        : `https://vidsrc.cc/v2/embed/movie/${id}`,
   },
   {
     label: 'Server 1',
