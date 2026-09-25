@@ -41,7 +41,7 @@ export default async function HomePage() {
   const series = (s.results || []).map(fmt);
 
   return (
-    <main style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #dce8f5 0%, #b8d4ee 30%, #7aafd4 70%, #1a3a5c 100%)', backgroundAttachment: 'fixed' }}>
+    <main style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #c8dff2 0%, #9abfe0 25%, #5a90bf 60%, #1a3a5c 100%)', backgroundAttachment: 'fixed', paddingBottom: 80 }}>
       <style>{`
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(20px); }

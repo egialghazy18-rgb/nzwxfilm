@@ -25,7 +25,7 @@ export default function NowPlaying({ films }) {
   if (!films.length) return null;
 
   return (
-    <div style={{ marginBottom: 8, position: 'relative' }}>
+    <div style={{ marginBottom: 8, position: 'relative', isolation: 'isolate' }}>
       <div style={{
         position: 'absolute', inset: 0, zIndex: 0, transform: 'scale(1.1)',
         backgroundImage: `url(${films[active]?.poster})`,
