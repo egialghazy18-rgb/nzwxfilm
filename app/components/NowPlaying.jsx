@@ -31,11 +31,11 @@ export default function NowPlaying({ films }) {
         position: 'absolute', inset: 0, zIndex: 0,
         backgroundImage: `url(${films[active]?.poster})`,
         backgroundSize: 'cover', backgroundPosition: 'center',
-        filter: 'blur(50px) saturate(3) brightness(1.1)',
-        opacity: 0.75,
+        filter: 'blur(30px) saturate(5) brightness(1.4)',
+        opacity: 0.8,
         transition: 'opacity 0.5s ease',
-        maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+        maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
         pointerEvents: 'none',
       }} />
 
