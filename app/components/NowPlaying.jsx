@@ -32,10 +32,10 @@ export default function NowPlaying({ films }) {
         backgroundImage: `url(${films[active]?.poster})`,
         backgroundSize: 'cover', backgroundPosition: 'center',
         filter: 'blur(50px) saturate(3) brightness(1.1)',
-        opacity: 0.45,
+        opacity: 0.75,
         transition: 'opacity 0.5s ease',
-        maskImage: 'radial-gradient(ellipse 110% 95% at 50% 50%, black 0%, transparent 65%)',
-        WebkitMaskImage: 'radial-gradient(ellipse 110% 95% at 50% 50%, black 0%, transparent 65%)',
+        maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
         pointerEvents: 'none',
       }} />
 
