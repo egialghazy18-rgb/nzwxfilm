@@ -32,7 +32,7 @@ export default function NowPlaying({ films }) {
       <div ref={ref} style={{ overflowX: 'auto', display: 'flex', alignItems: 'center', gap: 12, padding: '8px 80px 16px', scrollbarWidth: 'none', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none' }}>
         {films.map((film, i) => (
           <a key={film.id} href={`/watch/${film.id}`} style={{
-            flex: '0 0 65vw', maxWidth: 260,
+            flex: '0 0 52vw', maxWidth: 200,
             borderRadius: 20, overflow: 'hidden',
             position: 'relative',
             aspectRatio: '2/3',
@@ -40,7 +40,7 @@ export default function NowPlaying({ films }) {
             textDecoration: 'none',
             flexShrink: 0,
             scrollSnapAlign: 'center',
-            transform: i === active ? 'scale(1.07)' : 'scale(0.88)',
+            transform: i === active ? 'scale(1.04)' : 'scale(0.9)',
             transition: 'transform 0.35s ease, box-shadow 0.35s ease',
             boxShadow: i === active ? '0 16px 40px rgba(0,0,0,0.4)' : '0 4px 12px rgba(0,0,0,0.15)',
             zIndex: i === active ? 2 : 1,
