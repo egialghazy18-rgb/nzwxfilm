@@ -25,16 +25,17 @@ export default function NowPlaying({ films }) {
   if (!films.length) return null;
 
   return (
-    <div style={{ marginBottom: 8, position: 'relative', overflow: 'hidden' }}>
+    <div style={{ marginBottom: 8, position: 'relative' }}>
       <div style={{
-        position: 'absolute', inset: 0, zIndex: 0,
+        position: 'absolute', inset: '-60px', zIndex: 0,
         backgroundImage: `url(${films[active]?.poster})`,
         backgroundSize: 'cover', backgroundPosition: 'center',
-        filter: 'blur(40px) saturate(4) brightness(1.3)',
-        opacity: 0.6,
-        transition: 'background-image 0.8s ease, opacity 0.8s ease',
-        transform: 'scale(1.4)',
+        filter: 'blur(80px) saturate(3) brightness(1.2)',
+        opacity: 0.5,
+        transition: 'opacity 0.8s ease',
         pointerEvents: 'none',
+        maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%)',
       }} />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
