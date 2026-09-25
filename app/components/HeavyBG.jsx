@@ -2,109 +2,132 @@
 import { useEffect, useRef } from 'react';
 
 export default function HeavyBG() {
-  const canvasRef = useRef(null);
+  const c1 = useRef(null);
+  const c2 = useRef(null);
+  const c3 = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let W = canvas.width = window.innerWidth;
-    let H = canvas.height = window.innerHeight * 3;
+    const canvases = [c1.current, c2.current, c3.current].filter(Boolean);
+    const W = window.innerWidth;
+    const H = window.innerHeight * 4;
+    const ctxs = canvases.map(c => { c.width=W; c.height=H; return c.getContext('2d'); });
 
-    // 400 partikel
-    const particles = Array.from({ length: 400 }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 8 + 2,
-      dx: (Math.random() - 0.5) * 1.5,
-      dy: (Math.random() - 0.5) * 1.5,
-      o: Math.random() * 0.8 + 0.2,
-      color: `hsl(${Math.random() * 80 + 180}, 90%, 65%)`,
-      blur: Math.random() * 10,
+    // Canvas 1: 600 partikel shadowBlur gila
+    const p1 = Array.from({length:600},()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      r:Math.random()*6+1,
+      dx:(Math.random()-.5)*2, dy:(Math.random()-.5)*2,
+      h:Math.random()*360, s:Math.random()*0.7+0.3,
     }));
 
-    // 20 orbs gede
-    const orbs = Array.from({ length: 20 }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 300 + 100,
-      dx: (Math.random() - 0.5) * 0.3,
-      dy: (Math.random() - 0.5) * 0.3,
-      h: Math.random() * 60 + 180,
+    // Canvas 2: 300 orbs besar
+    const p2 = Array.from({length:300},()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      r:Math.random()*120+40,
+      dx:(Math.random()-.5)*0.5, dy:(Math.random()-.5)*0.5,
+      h:Math.random()*360,
     }));
 
-    let animId;
-    const animate = () => {
-      ctx.clearRect(0, 0, W, H);
+    // Canvas 3: 1000 titik kecil
+    const p3 = Array.from({length:1000},()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      r:Math.random()*2+0.5,
+      dx:(Math.random()-.5)*3, dy:(Math.random()-.5)*3,
+      h:Math.random()*60+180,
+    }));
 
-      // Orbs gede berat
-      orbs.forEach(orb => {
-        const g = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.r);
-        g.addColorStop(0, `hsla(${orb.h},80%,60%,0.35)`);
-        g.addColorStop(0.5, `hsla(${orb.h+30},70%,50%,0.15)`);
-        g.addColorStop(1, `hsla(${orb.h},80%,60%,0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(orb.x, orb.y, orb.r, 0, Math.PI*2);
-        ctx.fill();
-        orb.x += orb.dx; orb.y += orb.dy;
-        if (orb.x < -orb.r || orb.x > W+orb.r) orb.dx *= -1;
-        if (orb.y < -orb.r || orb.y > H+orb.r) orb.dy *= -1;
-        orb.h = (orb.h + 0.1) % 360;
+    const ids = [];
+
+    const draw1 = () => {
+      const ctx = ctxs[0];
+      ctx.clearRect(0,0,W,H);
+      p1.forEach(p => {
+        for(let i=0;i<3;i++){
+          ctx.save();
+          ctx.shadowBlur = 30+i*20;
+          ctx.shadowColor = `hsl(${p.h},90%,60%)`;
+          ctx.beginPath();
+          ctx.arc(p.x,p.y,p.r+i*2,0,Math.PI*2);
+          ctx.fillStyle = `hsla(${p.h},90%,60%,${p.s})`;
+          ctx.fill();
+          ctx.restore();
+        }
+        p.x+=p.dx; p.y+=p.dy;
+        if(p.x<0||p.x>W)p.dx*=-1;
+        if(p.y<0||p.y>H)p.dy*=-1;
+        p.h=(p.h+0.5)%360;
       });
-
-      // Partikel dengan shadowBlur berat
-      particles.forEach(p => {
-        ctx.save();
-        ctx.shadowBlur = p.blur * 4;
-        ctx.shadowColor = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.o;
-        ctx.fill();
-        ctx.restore();
-        p.x += p.dx; p.y += p.dy;
-        if (p.x < 0 || p.x > W) p.dx *= -1;
-        if (p.y < 0 || p.y > H) p.dy *= -1;
-      });
-
-      // Koneksi berat semua partikel
-      ctx.globalAlpha = 1;
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i+1; j < Math.min(i+15, particles.length); j++) {
-          const p = particles[i], q = particles[j];
-          const d = Math.hypot(p.x-q.x, p.y-q.y);
-          if (d < 150) {
+      // Koneksi semua dengan shadowBlur
+      for(let i=0;i<p1.length;i++){
+        for(let j=i+1;j<Math.min(i+20,p1.length);j++){
+          const a=p1[i],b=p1[j];
+          const d=Math.hypot(a.x-b.x,a.y-b.y);
+          if(d<200){
             ctx.save();
-            ctx.shadowBlur = 4;
-            ctx.shadowColor = 'rgba(100,180,255,0.5)';
+            ctx.shadowBlur=8;
+            ctx.shadowColor=`hsl(${a.h},80%,60%)`;
             ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(q.x, q.y);
-            ctx.strokeStyle = `rgba(120,180,255,${0.3*(1-d/150)})`;
-            ctx.lineWidth = 1;
+            ctx.moveTo(a.x,a.y);
+            ctx.lineTo(b.x,b.y);
+            ctx.strokeStyle=`hsla(${a.h},80%,60%,${0.4*(1-d/200)})`;
+            ctx.lineWidth=1.5;
             ctx.stroke();
             ctx.restore();
           }
         }
       }
-
-      animId = requestAnimationFrame(animate);
+      ids[0]=requestAnimationFrame(draw1);
     };
-    animate();
-    return () => cancelAnimationFrame(animId);
+
+    const draw2 = () => {
+      const ctx = ctxs[1];
+      ctx.clearRect(0,0,W,H);
+      p2.forEach(p => {
+        const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+        g.addColorStop(0,`hsla(${p.h},80%,60%,0.5)`);
+        g.addColorStop(0.4,`hsla(${p.h+40},70%,50%,0.3)`);
+        g.addColorStop(1,`hsla(${p.h},80%,60%,0)`);
+        ctx.fillStyle=g;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+        p.x+=p.dx; p.y+=p.dy;
+        if(p.x<-p.r||p.x>W+p.r)p.dx*=-1;
+        if(p.y<-p.r||p.y>H+p.r)p.dy*=-1;
+        p.h=(p.h+0.3)%360;
+      });
+      ids[1]=requestAnimationFrame(draw2);
+    };
+
+    const draw3 = () => {
+      const ctx = ctxs[2];
+      ctx.clearRect(0,0,W,H);
+      p3.forEach(p => {
+        ctx.save();
+        ctx.shadowBlur=15;
+        ctx.shadowColor=`hsl(${p.h},90%,70%)`;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=`hsla(${p.h},90%,70%,0.9)`;
+        ctx.fill();
+        ctx.restore();
+        p.x+=p.dx; p.y+=p.dy;
+        if(p.x<0||p.x>W)p.dx*=-1;
+        if(p.y<0||p.y>H)p.dy*=-1;
+      });
+      ids[2]=requestAnimationFrame(draw3);
+    };
+
+    draw1(); draw2(); draw3();
+    return () => ids.forEach(id=>cancelAnimationFrame(id));
   }, []);
 
   return (
     <>
-      <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }} />
-      {/* Extra blur layer berat */}
-      <div style={{
-        position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse at 20% 20%, rgba(100,150,255,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, rgba(255,100,200,0.1) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(100,255,200,0.1) 0%, transparent 50%)',
-        filter: 'blur(40px)',
-      }} />
+      <canvas ref={c1} style={{position:'fixed',inset:0,zIndex:0,pointerEvents:'none',opacity:0.8,filter:'blur(2px)'}} />
+      <canvas ref={c2} style={{position:'fixed',inset:0,zIndex:0,pointerEvents:'none',opacity:0.6,filter:'blur(8px)'}} />
+      <canvas ref={c3} style={{position:'fixed',inset:0,zIndex:0,pointerEvents:'none',opacity:1,filter:'blur(1px)'}} />
+      <div style={{position:'fixed',inset:0,zIndex:0,pointerEvents:'none',backdropFilter:'blur(2px)',WebkitBackdropFilter:'blur(2px)'}} />
     </>
   );
 }
