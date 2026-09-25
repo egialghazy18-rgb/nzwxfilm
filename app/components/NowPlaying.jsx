@@ -51,7 +51,7 @@ export default function NowPlaying({ films }) {
               flexShrink: 0, scrollSnapAlign: 'center',
               transform: i === active ? 'scale(1.06) translateY(-4px)' : 'scale(0.88)',
               transition: 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease',
-              boxShadow: i === active ? '0 20px 60px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.3)' : '0 4px 16px rgba(0,0,0,0.2)',
+              boxShadow: 'none',
               zIndex: i === active ? 2 : 1,
             }}>
               <img src={film.poster} alt={film.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
