@@ -48,7 +48,7 @@ export default async function HomePage() {
 
       {/* Sticky Navbar glass */}
       <div style={{
-        position: 'sticky', top: 0, zIndex: 100,
+        position: 'relative', zIndex: 10,
         background: 'rgba(232,241,251,0.85)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
