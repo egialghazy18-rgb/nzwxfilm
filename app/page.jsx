@@ -41,12 +41,15 @@ export default async function HomePage() {
   const series = (s.results || []).map(fmt);
 
   return (
-    <main style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #c8dff2 0%, #9abfe0 25%, #5a90bf 60%, #1a3a5c 100%)', backgroundAttachment: 'fixed', paddingBottom: 80 }}>
+    <main style={{ minHeight: '100vh', background: '#0d1b2e', paddingBottom: 80 }}>
       <style>{`
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        body { background: #0d1b2e !important; }
+        :root { --bg: linear-gradient(180deg, #c8dff2 0%, #7aafd4 40%, #2a5f8f 70%, #0d1b2e 100%); }
+        main { background: var(--bg) !important; min-height: 100vh; }
       `}</style>
 
       {/* Header glass */}
