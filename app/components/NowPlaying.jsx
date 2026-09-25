@@ -50,11 +50,11 @@ export default function NowPlaying({ films }) {
               flexShrink: 0, scrollSnapAlign: 'center',
               transform: i === active ? 'scale(1.04)' : 'scale(0.9)',
               transition: 'transform 0.35s ease, box-shadow 0.35s ease',
-              boxShadow: i === active ? '0 16px 40px rgba(0,0,0,0.4)' : '0 4px 12px rgba(0,0,0,0.15)',
+              boxShadow: i === active ? '0 12px 32px rgba(0,0,0,0.25)' : '0 2px 8px rgba(0,0,0,0.1)',
               zIndex: i === active ? 2 : 1,
             }}>
               <img src={film.poster} alt={film.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-              <div style={{ position: 'absolute', inset: 0, background: i === active ? 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 55%)' : 'rgba(0,0,0,0.35)' }} />
+              <div style={{ position: 'absolute', inset: 0, background: i === active ? 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%)' : 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 100%)' }} />
               {i === active && (
                 <div style={{ position: 'absolute', bottom: 14, left: 12, right: 12 }}>
                   <p style={{ fontSize: 13, fontWeight: 800, color: '#fff', lineHeight: 1.3, marginBottom: 4 }}>{film.title}</p>
