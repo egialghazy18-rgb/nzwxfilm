@@ -1,25 +1,24 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import BottomNav from "./components/BottomNav";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from './context/ThemeContext';
+import BottomNav from './components/BottomNav';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "NzwxFilm",
-  description: "Nonton film dan series favorit kamu",
-};
-
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  title: 'NzwxFilm',
+  description: 'Nonton film & series online',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
-      <body>
-        {children}
-        <BottomNav />
+      <body className={inter.className} style={{ margin: 0, padding: 0 }}>
+        <ThemeProvider>
+          {children}
+          <BottomNav />
+        </ThemeProvider>
       </body>
     </html>
   );
