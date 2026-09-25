@@ -47,7 +47,7 @@ export default async function HomePage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #e8f4fd 0%, #b3d9f7 25%, #5ba3d9 55%, #1a5c99 80%, #0a2a52 100%)',
+      background: 'linear-gradient(180deg, #dff0fc 0%, #a8d4f5 20%, #5aaee0 50%, #1a6bb5 75%, #0b3270 100%)',
       overflowX: 'hidden',
       position: 'relative',
     }}>
