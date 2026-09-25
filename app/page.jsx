@@ -1,6 +1,7 @@
 import { getTrending, getTrendingSeries, getPopular, getPopularSeries, fmt } from './lib/tmdb';
 import MovieCard from './components/MovieCard';
 import BannerSlider from './components/BannerSlider';
+import NowPlaying from './components/NowPlaying';
 
 function CategoryIcon({ icon, label, href }) {
   return (
@@ -92,27 +93,7 @@ export default async function HomePage() {
         </div>
       </div>
 
-      <div style={{ marginBottom: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, padding: '0 16px' }}>
-          <h2 style={{ fontSize: 17, fontWeight: 800, color: '#1a237e', letterSpacing: '-0.3px' }}>Now Playing</h2>
-        </div>
-        <div style={{ overflowX: 'auto', display: 'flex', gap: 14, padding: '0 80px 12px', scrollbarWidth: 'none', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none' }}>
-          {trending.slice(0, 10).map((film, i) => (
-            <a key={film.id} href={`/watch/${film.id}`} style={{ flex: '0 0 75vw', maxWidth: 280, borderRadius: 20, overflow: 'hidden', position: 'relative', aspectRatio: '2/3', display: 'block', boxShadow: '0 12px 32px rgba(0,0,0,0.3)', textDecoration: 'none', flexShrink: 0, scrollSnapAlign: 'center' }}>
-              <img src={film.poster} alt={film.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 55%)' }} />
-              <div style={{ position: 'absolute', bottom: 14, left: 12, right: 12 }}>
-                <p style={{ fontSize: 14, fontWeight: 800, color: '#fff', lineHeight: 1.3, marginBottom: 4 }}>{film.title}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>★ {film.rating?.toFixed(1)}</span>
-                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>{film.release_date?.slice(0,4)}</span>
-                </div>
-              </div>
-              <div style={{ position: 'absolute', top: 10, left: 10, background: '#e21221', borderRadius: 6, padding: '2px 8px', fontSize: 10, fontWeight: 700, color: '#fff' }}>HD</div>
-            </a>
-          ))}
-        </div>
-      </div>
+      <NowPlaying films={trending.slice(0, 10)} />
       <Section title="Trending" items={trending} href="/trending" />
       <Section title="Film Populer" items={movies} href="/movies" />
       <Section title="Series Populer" items={series} href="/series" />
