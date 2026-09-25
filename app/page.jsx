@@ -43,31 +43,27 @@ export default async function HomePage() {
   return (
     <main style={{ minHeight: '100vh', background: '#dce8f5' }}>
 
-      {/* Header dark blur */}
+      {/* Header glass */}
       <div style={{
-        background: 'rgba(13,27,60,0.82)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(255,255,255,0.72)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderBottom: '1px solid rgba(255,255,255,0.6)',
         padding: '52px 20px 14px',
         position: 'sticky', top: 0, zIndex: 50,
+        boxShadow: '0 2px 20px rgba(0,0,0,0.06)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg,#1565c0,#0d47a1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-            </div>
-            <h1 style={{ fontSize: 20, fontWeight: 900, color: '#fff', letterSpacing: '-0.5px' }}>
-              Nzwx<span style={{ color: '#4fc3f7' }}>Film</span>
-            </h1>
-          </div>
+          <h1 style={{ fontSize: 22, fontWeight: 900, color: '#0d2b6b', letterSpacing: '-0.5px' }}>
+            Nzwx<span style={{ color: '#1565c0' }}>Film</span>
+          </h1>
           <a href="/search" style={{
-            width: 38, height: 38, borderRadius: 12,
-            background: 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(255,255,255,0.15)',
+            width: 40, height: 40, borderRadius: 14,
+            background: 'rgba(21,101,192,0.1)',
+            border: '1.5px solid rgba(21,101,192,0.2)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1565c0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
           </a>
