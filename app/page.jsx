@@ -6,7 +6,7 @@ function CategoryIcon({ icon, label, href }) {
   return (
     <a href={href} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
       <div style={{ width: 60, height: 60, borderRadius: 18, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 10px rgba(0,0,0,0.07)' }}>{icon}</div>
-      <span style={{ fontSize: 11, fontWeight: 600, color: '#1a237e' }}>{label}</span>
+      <span style={{ fontSize: 11, fontWeight: 600, color: '#fff' }}>{label}</span>
     </a>
   );
 }
