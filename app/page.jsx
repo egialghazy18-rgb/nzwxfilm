@@ -44,7 +44,7 @@ export default async function HomePage() {
   const series = (s.results || []).map(fmt);
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #f0f7ff 0%, #dceeff 50%, #c5e0f5 100%)', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #dce8f5 0%, #a8c8e8 40%, #3a6d9e 80%, #0d2b4e 100%)', overflowX: 'hidden' }}>
 
       {/* Sticky Navbar glass */}
       <div style={{

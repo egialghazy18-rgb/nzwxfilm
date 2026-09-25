@@ -25,19 +25,7 @@ export default function NowPlaying({ films }) {
   if (!films.length) return null;
 
   return (
-    <div style={{ marginBottom: 8, position: 'relative', isolation: 'isolate', overflow: 'hidden', borderRadius: 0 }}>
-      {films.map((film, i) => (
-        <div key={film.id} style={{
-          position: 'absolute', inset: '-30px', zIndex: 0,
-          backgroundImage: `url(${film.poster})`,
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'blur(70px) saturate(1.8)',
-          opacity: i === active ? 0.3 : 0,
-          transition: 'opacity 0.8s ease',
-          pointerEvents: 'none',
-          borderRadius: 40,
-        }} />
-      ))}
+    <div style={{ marginBottom: 8, position: 'relative' }}>
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', marginBottom: 14 }}>
