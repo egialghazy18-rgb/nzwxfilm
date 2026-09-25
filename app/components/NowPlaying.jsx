@@ -26,18 +26,15 @@ export default function NowPlaying({ films }) {
 
   return (
     <div style={{ marginBottom: 8, position: 'relative' }}>
-      {films.map((film, i) => (
-        <div key={film.id} style={{
-          position: 'absolute', inset: '-30px', zIndex: 0,
-          backgroundImage: `url(${film.poster})`,
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'blur(60px) saturate(1.6)',
-          opacity: i === active ? 0.2 : 0,
-          transition: 'opacity 0.8s ease',
-          pointerEvents: 'none',
-          borderRadius: 40,
-        }} />
-      ))}
+      <div style={{
+        position: 'absolute', inset: '-30px', zIndex: 0,
+        backgroundImage: `url(${films[active]?.poster})`,
+        backgroundSize: 'cover', backgroundPosition: 'center',
+        filter: 'blur(80px) saturate(2)',
+        opacity: 0.25,
+        transition: 'background-image 0s, opacity 1s ease',
+        pointerEvents: 'none',
+      }} />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', marginBottom: 14 }}>
