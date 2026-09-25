@@ -25,7 +25,7 @@ export default function NowPlaying({ films }) {
   if (!films.length) return null;
 
   return (
-    <div style={{ marginBottom: 8, position: 'relative' }}>
+    <div style={{ marginBottom: 8, position: 'relative', isolation: 'isolate', overflow: 'hidden', borderRadius: 0 }}>
       {films.map((film, i) => (
         <div key={film.id} style={{
           position: 'absolute', inset: '-30px', zIndex: 0,
