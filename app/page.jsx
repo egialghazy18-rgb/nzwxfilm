@@ -26,7 +26,7 @@ function Section({ title, items, href }) {
           <a href={href} style={{ fontSize: 12, color: '#1565c0', fontWeight: 600, background: 'rgba(21,101,192,0.1)', padding: '4px 12px', borderRadius: 100 }}>Lihat Semua</a>
         )}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, padding: '0 16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12, padding: '0 16px' }}>
         {items.slice(0, 20).map(f => <MovieCard key={f.id} film={f} />)}
       </div>
     </section>
@@ -72,6 +72,18 @@ export default async function HomePage() {
       </div>
 
       <BannerSlider films={trending.slice(0, 8)} />
+      <div style={{ overflowX: 'auto', display: 'flex', gap: 12, padding: '16px 16px 4px', scrollbarWidth: 'none' }}>
+        {trending.slice(0, 10).map(film => (
+          <a key={film.id} href={`/watch/${film.id}`} style={{ flex: '0 0 160px', borderRadius: 16, overflow: 'hidden', position: 'relative', aspectRatio: '2/3', display: 'block', boxShadow: '0 4px 16px rgba(0,0,0,0.2)', textDecoration: 'none', flexShrink: 0 }}>
+            <img src={film.poster} alt={film.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%)' }} />
+            <div style={{ position: 'absolute', bottom: 8, left: 8, right: 8 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: '#fff', lineHeight: 1.3 }}>{film.title}</p>
+              <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)' }}>★ {film.rating?.toFixed(1)}</p>
+            </div>
+          </a>
+        ))}
+      </div>
 
       {/* Categories */}
       <div style={{ padding: '12px 16px 20px' }}>
