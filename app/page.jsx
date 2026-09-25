@@ -32,7 +32,7 @@ export default async function HomePage() {
   const series = (s.results || []).map(fmt);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#dce8f5', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #dce8f5 0%, #b8d4ee 30%, #7aafd4 70%, #1a3a5c 100%)', backgroundAttachment: 'fixed', overflowX: 'hidden' }}>
 
       {/* Header */}
       <div style={{ background: 'linear-gradient(160deg, #0d2b6b 0%, #1565c0 60%, #1e88e5 100%)', padding: '52px 16px 20px', borderRadius: '0 0 28px 28px', boxShadow: '0 8px 32px rgba(13,43,107,0.25)', position: 'relative', zIndex: 1 }}>
