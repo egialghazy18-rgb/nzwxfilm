@@ -1,6 +1,7 @@
 import { getTrending, getPopular, getPopularSeries, fmt } from './lib/tmdb';
 import NowPlaying from './components/NowPlaying';
 import HeroSlider from './components/HeroSlider';
+import HeavyBG from './components/HeavyBG';
 
 function CategoryIcon({ icon, label, href }) {
   return (
@@ -44,70 +45,71 @@ export default async function HomePage() {
   const series = (s.results || []).map(fmt);
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #dce8f5 0%, #a8c8e8 40%, #3a6d9e 80%, #0d2b4e 100%)', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: '#000', overflowX: 'hidden', position: 'relative' }}>
 
-      {/* Sticky Navbar glass */}
-      <div style={{
-        position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(232,241,251,0.85)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(255,255,255,0.6)',
-        padding: '48px 16px 14px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        boxShadow: 'none',
-      }}>
-        <div>
-          <p style={{ fontSize: 11, color: 'rgba(26,35,126,0.5)', marginBottom: 1 }}>Selamat datang di</p>
-          <h1 style={{ fontSize: 20, fontWeight: 900, color: '#1a237e', letterSpacing: '-0.5px' }}>
-            Nzwx<span style={{ color: '#1565c0' }}>Film</span>
-          </h1>
-        </div>
-        <a href="/search" style={{
-          width: 40, height: 40, borderRadius: 12,
-          background: 'rgba(255,255,255,0.7)',
-          border: '1px solid rgba(255,255,255,0.9)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: 'none',
-        }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1565c0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </a>
-      </div>
+      {/* HEAVY BACKGROUND — ini yang bikin lag */}
+      <HeavyBG />
 
-      {/* Hero Slider */}
-      <div style={{ padding: '16px 16px 0' }}>
-        <HeroSlider films={trending.slice(0, 8)} />
-      </div>
+      {/* Overlay gelap biar konten tetap kebaca */}
+      <div style={{ position: 'relative', zIndex: 10 }}>
 
-      {/* Categories */}
-      <div style={{ padding: '16px' }}>
+        {/* Sticky Navbar */}
         <div style={{
-          background: 'rgba(255,255,255,0.75)',
+          position: 'sticky', top: 0, zIndex: 100,
+          background: 'rgba(0,0,0,0.5)',
           backdropFilter: 'blur(20px)',
-          borderRadius: 22, padding: '16px 12px',
-          border: '1px solid rgba(255,255,255,0.95)',
-          boxShadow: 'none',
-          display: 'flex', justifyContent: 'space-around',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+          padding: '48px 16px 14px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <CategoryIcon href="/movies" label="Film" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e53935" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>} />
-          <CategoryIcon href="/series" label="Series" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8e24aa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>} />
-          <CategoryIcon href="/trending" label="Trending" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f57c00" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>} />
-          <CategoryIcon href="/search" label="Cari" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00897b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>} />
-          <CategoryIcon href="/developer" label="Dev" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1565c0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>} />
+          <div>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 1 }}>Selamat datang di</p>
+            <h1 style={{ fontSize: 20, fontWeight: 900, color: '#fff', letterSpacing: '-0.5px' }}>
+              Nzwx<span style={{ color: '#4fc3f7' }}>Film</span>
+            </h1>
+          </div>
+          <a href="/search" style={{
+            width: 40, height: 40, borderRadius: 12,
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </a>
         </div>
-      </div>
 
-      {/* Now Playing — horizontal scroll mirip m.tix */}
-      <NowPlaying films={trending} />
+        {/* Hero Slider */}
+        <div style={{ padding: '16px 16px 0' }}>
+          <HeroSlider films={trending.slice(0, 8)} />
+        </div>
 
-      {/* Sections grid */}
-      <div style={{ paddingTop: 8 }}>
-        <Section title="Trending" items={trending} href="/trending" />
-        <Section title="Film Populer" items={movies} href="/movies" />
-        <Section title="Series Populer" items={series} href="/series" />
+        {/* Categories */}
+        <div style={{ padding: '16px' }}>
+          <div style={{
+            background: 'rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: 22, padding: '16px 12px',
+            border: '1px solid rgba(255,255,255,0.15)',
+            display: 'flex', justifyContent: 'space-around',
+          }}>
+            <CategoryIcon href="/movies" label="Film" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e53935" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>} />
+            <CategoryIcon href="/series" label="Series" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8e24aa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>} />
+            <CategoryIcon href="/trending" label="Trending" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f57c00" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>} />
+            <CategoryIcon href="/search" label="Cari" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00897b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>} />
+            <CategoryIcon href="/developer" label="Dev" icon={<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>} />
+          </div>
+        </div>
+
+        <NowPlaying films={trending} />
+
+        <div style={{ paddingTop: 8 }}>
+          <Section title="Trending" items={trending} href="/trending" />
+          <Section title="Film Populer" items={movies} href="/movies" />
+          <Section title="Series Populer" items={series} href="/series" />
+        </div>
       </div>
     </div>
   );
