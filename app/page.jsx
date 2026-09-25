@@ -54,9 +54,12 @@ export default async function HomePage() {
         boxShadow: '0 2px 20px rgba(0,0,0,0.06)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h1 style={{ fontSize: 22, fontWeight: 900, color: '#0d2b6b', letterSpacing: '-0.5px' }}>
-            Nzwx<span style={{ color: '#1565c0' }}>Film</span>
-          </h1>
+          <div>
+            <p style={{ fontSize: 11, color: 'rgba(13,43,107,0.5)', marginBottom: 1, fontWeight: 500 }}>Selamat datang di</p>
+            <h1 style={{ fontSize: 22, fontWeight: 900, color: '#0d2b6b', letterSpacing: '-0.5px' }}>
+              Nzwx<span style={{ color: '#1565c0' }}>Film</span>
+            </h1>
+          </div>
           <a href="/search" style={{
             width: 40, height: 40, borderRadius: 14,
             background: 'rgba(21,101,192,0.1)',
