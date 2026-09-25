@@ -53,7 +53,7 @@ export default async function HomePage() {
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid rgba(255,255,255,0.6)',
-        padding: '14px 16px',
+        padding: '48px 16px 14px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
       }}>
