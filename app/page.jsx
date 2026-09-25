@@ -20,7 +20,7 @@ function CategoryIcon({ icon, label, href }) {
 
 function Section({ title, items, href }) {
   return (
-    <section style={{ marginBottom: 32 }}>
+    <section style={{ marginBottom: 32, animation: 'fadeUp 0.5s ease both' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, padding: '0 16px' }}>
         <h2 style={{ fontSize: 17, fontWeight: 800, color: '#1a237e', letterSpacing: '-0.3px' }}>{title}</h2>
         {href && (
@@ -42,6 +42,12 @@ export default async function HomePage() {
 
   return (
     <main style={{ minHeight: '100vh', background: '#dce8f5' }}>
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
 
       {/* Header glass */}
       <div style={{
