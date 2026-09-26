@@ -6,6 +6,7 @@ import WatchlistBtn from '../../components/WatchlistBtn';
 import ShareBtn from '../../components/ShareBtn';
 import RatingBox from '../../components/RatingBox';
 import TrailerBtn from '../../components/TrailerBtn';
+import { TrackVisitor, TrackFilm } from '../../components/Tracker';
 
 const KEY = '3a3f8986432b380633bf9670f5fff60a';
 const IMG = 'https://image.tmdb.org/t/p/w500';
