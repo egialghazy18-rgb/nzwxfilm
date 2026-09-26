@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { usePathname } from 'next/navigation';
@@ -42,6 +43,7 @@ export default function Sidebar() {
     const result = await installPrompt.userChoice;
     if (result.outcome === 'accepted') { setInstalled(true); setInstallPrompt(null); }
   };
+
   const { dark, toggle } = useTheme();
   const path = usePathname();
 
@@ -54,7 +56,6 @@ export default function Sidebar() {
     <>
       <HamburgerBtn onClick={() => setOpen(true)} dark={dark} />
 
-      {/* Overlay */}
       {open && (
         <div
           onClick={() => setOpen(false)}
@@ -62,7 +63,6 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar panel */}
       <div style={{
         position:'fixed', top:0, left:0, height:'100%', width:285,
         background:bg, zIndex:9999,
@@ -72,7 +72,6 @@ export default function Sidebar() {
         display:'flex', flexDirection:'column', overflowY:'auto',
       }}>
 
-        {/* Header */}
         <div style={{ padding:'56px 20px 20px', borderBottom:`1px solid ${borderC}` }}>
           <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16 }}>
             <h2 style={{ fontSize:22,fontWeight:900,color:txt }}>
@@ -87,14 +86,13 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Menu */}
         <div style={{ padding:'16px 12px',flex:1 }}>
           <p style={{ fontSize:10,fontWeight:700,color:sub,letterSpacing:'0.8px',marginBottom:10,paddingLeft:8 }}>MENU</p>
           {MENU.map(m => {
             const active = path === m.href;
             return (
               <a key={m.href} href={m.href} onClick={() => setOpen(false)} style={{ display:'flex',alignItems:'center',gap:12,padding:'11px 12px',borderRadius:14,marginBottom:4,textDecoration:'none',background:active?'#1565c0':'transparent',color:active?'#fff':txt,transition:'all 0.15s' }}>
-                <span style={{ opacity:active?1:0.65, color: active?'#fff':txt }}>{m.icon}</span>
+                <span style={{ opacity:active?1:0.65, color:active?'#fff':txt }}>{m.icon}</span>
                 <span style={{ fontSize:14,fontWeight:active?700:500 }}>{m.label}</span>
                 {active && <div style={{ marginLeft:'auto',width:6,height:6,borderRadius:'50%',background:'rgba(255,255,255,0.7)' }} />}
               </a>
@@ -102,7 +100,6 @@ export default function Sidebar() {
           })}
         </div>
 
-        {/* Developer + Dark toggle */}
         <div style={{ padding:'16px 20px 36px',borderTop:`1px solid ${borderC}` }}>
           <div style={{ display:'flex',alignItems:'center',gap:12,marginBottom:12 }}>
             <div style={{ width:40,height:40,borderRadius:12,background:'linear-gradient(135deg,#1565c0,#4fc3f7)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
@@ -115,14 +112,16 @@ export default function Sidebar() {
           </div>
           <p style={{ fontSize:11,color:sub,lineHeight:1.7,marginBottom:14 }}>NzwxFilm dibuat oleh Egii sebagai platform hiburan streaming film & series gratis untuk semua orang.</p>
 
-          {/* Install PWA */}
           {installed ? (
             <div style={{ display:'flex',alignItems:'center',gap:8,padding:'8px 14px',borderRadius:12,background:'rgba(76,175,80,0.1)',marginBottom:8 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               <span style={{ fontSize:12,color:'#4caf50',fontWeight:600 }}>Sudah terinstall</span>
             </div>
           ) : (
-            <button onClick={installPrompt ? handleInstall : () => alert('Buka di Chrome > menu titik 3 > Tambahkan ke layar utama')} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'11px 14px',borderRadius:12,border:'1px solid rgba(21,101,192,0.3)',background:'linear-gradient(135deg,rgba(21,101,192,0.1),rgba(79,195,247,0.1))',cursor:'pointer',color:txt,fontFamily:'Inter,sans-serif',marginBottom:8 }}>
+            <button
+              onClick={installPrompt ? handleInstall : () => alert('Buka di Chrome > menu titik 3 > Tambahkan ke layar utama')}
+              style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'11px 14px',borderRadius:12,border:'1px solid rgba(21,101,192,0.3)',background:'linear-gradient(135deg,rgba(21,101,192,0.1),rgba(79,195,247,0.1))',cursor:'pointer',color:txt,fontFamily:'Inter,sans-serif',marginBottom:8 }}
+            >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1565c0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               <div style={{ textAlign:'left' }}>
                 <p style={{ fontSize:13,fontWeight:700,color:'#1565c0',margin:0 }}>Install PWA</p>
@@ -130,22 +129,7 @@ export default function Sidebar() {
               </div>
             </button>
           )}
-          {installed && (
-            <div style={{ display:'flex',alignItems:'center',gap:8,padding:'8px 14px',borderRadius:12,background:'rgba(76,175,80,0.1)',marginBottom:8 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span style={{ fontSize:12,color:'#4caf50',fontWeight:600 }}>Sudah terinstall</span>
-            </div>
-          )}
-          )}
-          {/* Install PWA */}
-          <button onClick={installPrompt ? handleInstall : () => alert('Buka di Chrome > menu titik 3 > Tambahkan ke layar utama')} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'11px 14px',borderRadius:12,border:'1px solid rgba(21,101,192,0.3)',background:'linear-gradient(135deg,rgba(21,101,192,0.1),rgba(79,195,247,0.1))',cursor:'pointer',fontFamily:'Inter,sans-serif',marginBottom:8 }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1565c0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            <div style={{ textAlign:'left' }}>
-              <p style={{ fontSize:13,fontWeight:700,color:'#1565c0',margin:0 }}>Install PWA</p>
-              <p style={{ fontSize:10,color:sub,margin:0 }}>Tambah ke homescreen</p>
-            </div>
-          </button>
-          {/* Dark mode */}
+
           <button onClick={toggle} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'11px 14px',borderRadius:12,border:`1px solid ${borderC}`,background:dark?'rgba(255,255,255,0.06)':'rgba(21,101,192,0.05)',cursor:'pointer',color:txt,fontFamily:'Inter,sans-serif' }}>
             {dark ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
