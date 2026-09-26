@@ -7,6 +7,7 @@ import WakeLock from './components/WakeLock';
 import SplashScreen from './components/SplashScreen';
 import PageTransition from './components/PageTransition';
 import PWAInstall from './components/PWAInstall';
+import RegisterSW from './components/RegisterSW';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SplashScreen />
           <WakeLock />
           <PWAInstall />
+          <RegisterSW />
           <PageTransition>{children}</PageTransition>
           <BottomNav />
         </ThemeProvider>
