@@ -4,8 +4,6 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useTheme } from '../context/ThemeContext';
 
 const KEY = '3a3f8986432b380633bf9670f5fff60a';
-const TODAY = new Date();
-TODAY.setHours(0,0,0,0);
 
 export default function HistoryPage() {
   const { dark } = useTheme();
@@ -34,7 +32,9 @@ export default function HistoryPage() {
       const all = [
         ...(movies.results || []).map(f => ({ ...f, _type: 'movie' })),
         ...(series.results || []).map(f => ({ ...f, _type: 'tv' })),
-      ].sort((a, b) => new Date(b.release_date || b.first_air_date) - new Date(a.release_date || a.first_air_date));
+      ]
+      .filter(f => (f.vote_average || 0) > 0)
+      .sort((a, b) => new Date(b.release_date || b.first_air_date) - new Date(a.release_date || a.first_air_date));
       setNewFilms(all.slice(0, 30));
       setLoading(false);
     });
@@ -43,26 +43,25 @@ export default function HistoryPage() {
   useEffect(() => {
     if (tab !== 'jadwal') return;
     setLoading(true);
+    const todayStr = new Date().toISOString().slice(0, 10);
     Promise.all([
       fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${KEY}&language=id-ID&page=1`).then(r => r.json()),
       fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${KEY}&language=id-ID&page=2`).then(r => r.json()),
       fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${KEY}&language=id-ID&page=3`).then(r => r.json()),
-      fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=${KEY}&language=id-ID&page=1`).then(r => r.json()),
-    ]).then(([m1, m2, m3, tv]) => {
+    ]).then(([m1, m2, m3]) => {
       const all = [
         ...(m1.results || []).map(f => ({ ...f, _type: 'movie' })),
         ...(m2.results || []).map(f => ({ ...f, _type: 'movie' })),
         ...(m3.results || []).map(f => ({ ...f, _type: 'movie' })),
-        ...(tv.results || []).map(f => ({ ...f, _type: 'tv' })),
       ]
       .filter(f => {
-        const date = f.release_date || f.first_air_date;
+        const date = f.release_date;
         if (!date) return false;
-        const d = new Date(date);
-        // Hanya tampilkan yang >= hari ini dan tahun 2026-2027
-        return d >= TODAY && d.getFullYear() >= 2026 && d.getFullYear() <= 2027;
+        const yr = new Date(date).getFullYear();
+        // Hanya yang belum rilis (>= hari ini) dan tahun 2026-2027
+        return date >= todayStr && yr >= 2026 && yr <= 2027;
       })
-      .sort((a, b) => new Date(a.release_date || a.first_air_date) - new Date(b.release_date || b.first_air_date));
+      .sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
 
       // Hapus duplikat
       const seen = new Set();
@@ -83,19 +82,20 @@ export default function HistoryPage() {
     { id: 'jadwal', label: 'Jadwal Rilis', icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg> },
   ];
 
-  const FilmRow = ({ f }) => {
+  const FilmRow = ({ f, showSoon = false }) => {
     const date = f.release_date || f.first_air_date;
     const poster = f.poster_path ? `https://image.tmdb.org/t/p/w185${f.poster_path}` : null;
     const title = f.title || f.name;
-    const isNew = date && (new Date() - new Date(date)) < 7 * 24 * 60 * 60 * 1000;
-    const isToday = date === new Date().toISOString().slice(0,10);
-    const isFuture = date && new Date(date) > new Date();
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const isToday = date === todayStr;
+    const isNew = date && !isToday && (new Date() - new Date(date)) < 7 * 24 * 60 * 60 * 1000 && date < todayStr;
+    const rating = f.vote_average || 0;
 
     return (
       <a href={`/watch/${f.id}`} style={{ display:'flex', gap:12, textDecoration:'none', background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.6)', backdropFilter:'blur(12px)', borderRadius:16, padding:12, border: dark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(255,255,255,0.8)' }}>
         <div style={{ width:60, height:90, borderRadius:10, overflow:'hidden', background:card, flexShrink:0, position:'relative' }}>
           {poster && <img src={poster} alt={title} style={{ width:'100%', height:'100%', objectFit:'cover' }} />}
-          {isFuture && (
+          {showSoon && (
             <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.45)', display:'flex', alignItems:'center', justifyContent:'center' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
@@ -105,8 +105,8 @@ export default function HistoryPage() {
           <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:4, flexWrap:'wrap' }}>
             <p style={{ fontSize:13, fontWeight:700, color:txt, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', flex:1 }}>{title}</p>
             {isToday && <span style={{ background:'#22c55e', color:'#fff', fontSize:9, fontWeight:800, padding:'2px 6px', borderRadius:4, flexShrink:0 }}>HARI INI</span>}
-            {isNew && !isToday && <span style={{ background:'#e53935', color:'#fff', fontSize:9, fontWeight:800, padding:'2px 6px', borderRadius:4, flexShrink:0 }}>BARU</span>}
-            {isFuture && <span style={{ background:'#f59e0b', color:'#fff', fontSize:9, fontWeight:800, padding:'2px 6px', borderRadius:4, flexShrink:0 }}>SOON</span>}
+            {isNew && <span style={{ background:'#e53935', color:'#fff', fontSize:9, fontWeight:800, padding:'2px 6px', borderRadius:4, flexShrink:0 }}>BARU</span>}
+            {showSoon && <span style={{ background:'#f59e0b', color:'#fff', fontSize:9, fontWeight:800, padding:'2px 6px', borderRadius:4, flexShrink:0 }}>SOON</span>}
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:6 }}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={sub} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -114,10 +114,12 @@ export default function HistoryPage() {
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
             <span style={{ fontSize:11, color: f._type === 'tv' ? '#8e24aa' : '#e53935', fontWeight:700, background: f._type === 'tv' ? 'rgba(142,36,170,0.1)' : 'rgba(229,57,53,0.1)', padding:'2px 8px', borderRadius:6 }}>{f._type === 'tv' ? 'SERIES' : 'FILM'}</span>
-            <div style={{ display:'flex', alignItems:'center', gap:3 }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <span style={{ fontSize:11, color:sub, fontWeight:600 }}>{f.vote_average?.toFixed(1)}</span>
-            </div>
+            {rating > 0 && (
+              <div style={{ display:'flex', alignItems:'center', gap:3 }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span style={{ fontSize:11, color:sub, fontWeight:600 }}>{rating.toFixed(1)}</span>
+              </div>
+            )}
           </div>
         </div>
         <div style={{ display:'flex', alignItems:'center' }}>
@@ -237,7 +239,7 @@ export default function HistoryPage() {
               </div>
             ) : (
               <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-                {newFilms.map(f => <FilmRow key={f.id} f={f} />)}
+                {newFilms.map(f => <FilmRow key={f.id} f={f} showSoon={false} />)}
               </div>
             )}
           </div>
@@ -268,7 +270,7 @@ export default function HistoryPage() {
                     <div style={{ height:1, flex:1, background: dark ? 'rgba(255,255,255,0.1)' : 'rgba(21,101,192,0.15)' }} />
                   </div>
                   <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-                    {films.map(f => <FilmRow key={f.id} f={f} />)}
+                    {films.map(f => <FilmRow key={f.id} f={f} showSoon={true} />)}
                   </div>
                 </div>
               ))
