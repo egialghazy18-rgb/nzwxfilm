@@ -189,7 +189,7 @@ export default function SearchPage() {
 
         {/* Skeleton */}
         {loading && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'calc(50% - 6px) calc(50% - 6px)', gap: 12 }}>
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} style={{ borderRadius: 14, aspectRatio: '2/3', background: dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)', animation: 'pulse 1.5s ease-in-out infinite' }} />
             ))}
@@ -198,7 +198,7 @@ export default function SearchPage() {
 
         {/* Results */}
         {!loading && list.length > 0 && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'calc(50% - 6px) calc(50% - 6px)', gap: 12 }}>
             {list.map(f => (
               <a key={f.id} href={`/watch/${f.id}`} style={{ display: 'block', textDecoration: 'none' }}>
                 <div style={{ borderRadius: 14, overflow: 'hidden', background: cardBg, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
