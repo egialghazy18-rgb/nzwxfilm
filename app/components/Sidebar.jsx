@@ -1,0 +1,98 @@
+'use client';
+import { useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { usePathname } from 'next/navigation';
+
+const MENU = [
+  { href:'/', label:'Beranda', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> },
+  { href:'/movies', label:'Film', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg> },
+  { href:'/series', label:'Series', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg> },
+  { href:'/trending', label:'Trending', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> },
+  { href:'/watchlist', label:'Watchlist', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> },
+  { href:'/history', label:'Riwayat', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> },
+  { href:'/search', label:'Cari Film', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> },
+  { href:'/developer', label:'Developer', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> },
+];
+
+export default function Sidebar() {
+  const [open, setOpen] = useState(false);
+  const { dark, toggle } = useTheme();
+  const path = usePathname();
+
+  const bg = dark ? '#0d1b3e' : '#fff';
+  const txt = dark ? '#fff' : '#1a237e';
+  const sub = dark ? 'rgba(255,255,255,0.4)' : '#78909c';
+  const border = dark ? 'rgba(255,255,255,0.08)' : 'rgba(21,101,192,0.1)';
+
+  return (
+    <>
+      {/* Hamburger button — ditaruh di HomeClient/Navbar */}
+      <button onClick={() => setOpen(true)} style={{ width:40,height:40,borderRadius:12,border:'none',cursor:'pointer',background:dark?'rgba(255,255,255,0.1)':'rgba(255,255,255,0.7)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:5 }}>
+        <span style={{ display:'block',width:18,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
+        <span style={{ display:'block',width:14,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
+        <span style={{ display:'block',width:18,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
+      </button>
+
+      {/* Overlay */}
+      {open && <div onClick={() => setOpen(false)} style={{ position:'fixed',inset:0,background:'rgba(0,0,0,0.5)',zIndex:998,backdropFilter:'blur(4px)' }} />}
+
+      {/* Sidebar panel */}
+      <div style={{ position:'fixed',top:0,left:0,height:'100%',width:280,background:bg,zIndex:999,transform:open?'translateX(0)':'translateX(-100%)',transition:'transform 0.3s cubic-bezier(.4,0,.2,1)',boxShadow:open?'4px 0 40px rgba(0,0,0,0.3)':'none',display:'flex',flexDirection:'column',overflowY:'auto' }}>
+
+        {/* Header */}
+        <div style={{ padding:'56px 20px 20px',borderBottom:`1px solid ${border}` }}>
+          <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16 }}>
+            <h2 style={{ fontSize:22,fontWeight:900,color:txt }}>Nzwx<span style={{ color:'#1565c0' }}>Film</span></h2>
+            <button onClick={() => setOpen(false)} style={{ width:32,height:32,borderRadius:8,border:'none',cursor:'pointer',background:dark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.06)',display:'flex',alignItems:'center',justifyContent:'center' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={txt} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          {/* About */}
+          <div style={{ background:dark?'rgba(255,255,255,0.06)':'rgba(21,101,192,0.06)',borderRadius:14,padding:'12px 14px',border:`1px solid ${border}` }}>
+            <p style={{ fontSize:12,color:sub,lineHeight:1.7 }}>Platform streaming film & series online gratis. Tonton ribuan judul dengan kualitas terbaik tanpa batas.</p>
+          </div>
+        </div>
+
+        {/* Menu */}
+        <div style={{ padding:'16px 12px',flex:1 }}>
+          <p style={{ fontSize:10,fontWeight:700,color:sub,letterSpacing:'0.8px',marginBottom:10,paddingLeft:8 }}>MENU</p>
+          {MENU.map(m => {
+            const active = path === m.href;
+            return (
+              <a key={m.href} href={m.href} onClick={() => setOpen(false)} style={{ display:'flex',alignItems:'center',gap:12,padding:'11px 12px',borderRadius:14,marginBottom:4,textDecoration:'none',background:active?'#1565c0':'transparent',color:active?'#fff':txt,transition:'all 0.15s' }}>
+                <span style={{ opacity:active?1:0.7 }}>{m.icon}</span>
+                <span style={{ fontSize:14,fontWeight:active?700:500 }}>{m.label}</span>
+                {active && <div style={{ marginLeft:'auto',width:6,height:6,borderRadius:'50%',background:'rgba(255,255,255,0.8)' }} />}
+              </a>
+            );
+          })}
+        </div>
+
+        {/* Developer info */}
+        <div style={{ padding:'16px 20px 32px',borderTop:`1px solid ${border}` }}>
+          <div style={{ display:'flex',alignItems:'center',gap:12,marginBottom:14 }}>
+            <div style={{ width:40,height:40,borderRadius:12,background:'linear-gradient(135deg,#1565c0,#4fc3f7)',display:'flex',alignItems:'center',justifyContent:'center' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <div>
+              <p style={{ fontSize:13,fontWeight:700,color:txt }}>Egii</p>
+              <p style={{ fontSize:11,color:sub }}>Developer & Creator</p>
+            </div>
+          </div>
+          <p style={{ fontSize:11,color:sub,lineHeight:1.7,marginBottom:14 }}>NzwxFilm dibuat oleh Egii sebagai platform hiburan streaming film & series gratis untuk semua orang.</p>
+
+          {/* Dark mode toggle */}
+          <button onClick={toggle} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'10px 14px',borderRadius:12,border:`1px solid ${border}`,background:'transparent',cursor:'pointer',color:txt }}>
+            {dark ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1565c0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            )}
+            <span style={{ fontSize:13,fontWeight:600 }}>{dark?'Mode Terang':'Mode Gelap'}</span>
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
