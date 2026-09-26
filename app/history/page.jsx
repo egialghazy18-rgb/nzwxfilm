@@ -4,6 +4,8 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useTheme } from '../context/ThemeContext';
 
 const KEY = '3a3f8986432b380633bf9670f5fff60a';
+const TODAY = new Date();
+TODAY.setHours(0,0,0,0);
 
 export default function HistoryPage() {
   const { dark } = useTheme();
@@ -44,14 +46,33 @@ export default function HistoryPage() {
     Promise.all([
       fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${KEY}&language=id-ID&page=1`).then(r => r.json()),
       fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${KEY}&language=id-ID&page=2`).then(r => r.json()),
+      fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${KEY}&language=id-ID&page=3`).then(r => r.json()),
       fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=${KEY}&language=id-ID&page=1`).then(r => r.json()),
-    ]).then(([m1, m2, tv]) => {
+    ]).then(([m1, m2, m3, tv]) => {
       const all = [
         ...(m1.results || []).map(f => ({ ...f, _type: 'movie' })),
         ...(m2.results || []).map(f => ({ ...f, _type: 'movie' })),
+        ...(m3.results || []).map(f => ({ ...f, _type: 'movie' })),
         ...(tv.results || []).map(f => ({ ...f, _type: 'tv' })),
-      ].sort((a, b) => new Date(a.release_date || a.first_air_date) - new Date(b.release_date || b.first_air_date));
-      setUpcoming(all.slice(0, 40));
+      ]
+      .filter(f => {
+        const date = f.release_date || f.first_air_date;
+        if (!date) return false;
+        const d = new Date(date);
+        // Hanya tampilkan yang >= hari ini dan tahun 2026-2027
+        return d >= TODAY && d.getFullYear() >= 2026 && d.getFullYear() <= 2027;
+      })
+      .sort((a, b) => new Date(a.release_date || a.first_air_date) - new Date(b.release_date || b.first_air_date));
+
+      // Hapus duplikat
+      const seen = new Set();
+      const unique = all.filter(f => {
+        if (seen.has(f.id)) return false;
+        seen.add(f.id);
+        return true;
+      });
+
+      setUpcoming(unique);
       setLoading(false);
     });
   }, [tab]);
@@ -75,7 +96,7 @@ export default function HistoryPage() {
         <div style={{ width:60, height:90, borderRadius:10, overflow:'hidden', background:card, flexShrink:0, position:'relative' }}>
           {poster && <img src={poster} alt={title} style={{ width:'100%', height:'100%', objectFit:'cover' }} />}
           {isFuture && (
-            <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.45)', display:'flex', alignItems:'center', justifyContent:'center' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
           )}
@@ -106,7 +127,6 @@ export default function HistoryPage() {
     );
   };
 
-  // Group upcoming by month
   const groupByMonth = (films) => {
     const groups = {};
     films.forEach(f => {
@@ -123,13 +143,11 @@ export default function HistoryPage() {
     <main style={{ minHeight:'100vh', background:bg, paddingBottom:100 }}>
       <div style={{ maxWidth:900, margin:'0 auto', padding:'60px 16px 80px' }}>
 
-        {/* Header */}
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:20 }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ic} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <h1 style={{ fontSize:22, fontWeight:800, color:txt }}>Riwayat</h1>
         </div>
 
-        {/* Tabs */}
         <div style={{ display:'flex', gap:6, marginBottom:24, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.5)', borderRadius:14, padding:4 }}>
           {tabs.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)} style={{
@@ -138,14 +156,14 @@ export default function HistoryPage() {
               background: tab === t.id ? '#1565c0' : 'transparent',
               color: tab === t.id ? '#fff' : sub,
               fontWeight: tab === t.id ? 700 : 500,
-              fontSize:12, transition:'all 0.2s',
+              fontSize:12, transition:'all 0.2s', fontFamily:'inherit',
             }}>
               {t.icon}{t.label}
             </button>
           ))}
         </div>
 
-        {/* Tab Riwayat */}
+        {/* Riwayat */}
         {tab === 'riwayat' && (
           <>
             {cont.length > 0 && (
@@ -176,13 +194,9 @@ export default function HistoryPage() {
                 </div>
               </div>
             )}
-
             <div>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
-                <h2 style={{ fontSize:16, fontWeight:700, color:txt, paddingLeft:12, borderLeft:'4px solid #4fc3f7', display:'flex', alignItems:'center', gap:8 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={ic} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  Terakhir Dilihat
-                </h2>
+                <h2 style={{ fontSize:16, fontWeight:700, color:txt, paddingLeft:12, borderLeft:'4px solid #4fc3f7' }}>Terakhir Dilihat</h2>
                 {recent.length > 0 && <button onClick={() => setRecent([])} style={{ fontSize:12, color:'#e53935', background:'none', border:'none', cursor:'pointer', fontWeight:600 }}>Hapus Semua</button>}
               </div>
               {recent.length === 0 ? (
@@ -209,7 +223,7 @@ export default function HistoryPage() {
           </>
         )}
 
-        {/* Tab Film Baru */}
+        {/* Film Baru */}
         {tab === 'baru' && (
           <div>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
@@ -229,24 +243,28 @@ export default function HistoryPage() {
           </div>
         )}
 
-        {/* Tab Jadwal Rilis */}
+        {/* Jadwal Rilis */}
         {tab === 'jadwal' && (
           <div>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
-              <h2 style={{ fontSize:16, fontWeight:700, color:txt, paddingLeft:12, borderLeft:'4px solid #f59e0b' }}>Jadwal Rilis</h2>
-              <span style={{ fontSize:11, color:sub }}>Film & Series mendatang</span>
+              <h2 style={{ fontSize:16, fontWeight:700, color:txt, paddingLeft:12, borderLeft:'4px solid #f59e0b' }}>Jadwal Rilis 2026–2027</h2>
+              <span style={{ fontSize:11, color:sub }}>{upcoming.length} film</span>
             </div>
             {loading ? (
               <div style={{ textAlign:'center', padding:'40px 0', color:sub }}>
                 <div style={{ width:32, height:32, border:`3px solid ${ic}`, borderTopColor:'transparent', borderRadius:'50%', animation:'spin 0.8s linear infinite', margin:'0 auto 12px' }} />
                 <p>Memuat jadwal...</p>
               </div>
+            ) : upcoming.length === 0 ? (
+              <div style={{ textAlign:'center', padding:'40px 0', color:sub }}>
+                <p style={{ fontWeight:600 }}>Tidak ada jadwal ditemukan</p>
+              </div>
             ) : (
               Object.entries(groupByMonth(upcoming)).map(([month, films]) => (
                 <div key={month} style={{ marginBottom:24 }}>
                   <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
                     <div style={{ height:1, flex:1, background: dark ? 'rgba(255,255,255,0.1)' : 'rgba(21,101,192,0.15)' }} />
-                    <span style={{ fontSize:12, fontWeight:700, color:'#f59e0b', background: dark ? 'rgba(245,158,11,0.15)' : 'rgba(245,158,11,0.1)', padding:'4px 12px', borderRadius:20, border:'1px solid rgba(245,158,11,0.3)' }}>{month}</span>
+                    <span style={{ fontSize:12, fontWeight:700, color:'#f59e0b', background: dark ? 'rgba(245,158,11,0.15)' : 'rgba(245,158,11,0.1)', padding:'4px 14px', borderRadius:20, border:'1px solid rgba(245,158,11,0.3)', flexShrink:0 }}>{month}</span>
                     <div style={{ height:1, flex:1, background: dark ? 'rgba(255,255,255,0.1)' : 'rgba(21,101,192,0.15)' }} />
                   </div>
                   <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
