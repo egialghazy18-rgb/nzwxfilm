@@ -14,6 +14,16 @@ const MENU = [
   { href:'/developer', label:'Developer', icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> },
 ];
 
+export function HamburgerBtn({ onClick, dark }) {
+  return (
+    <button onClick={onClick} style={{ width:40,height:40,borderRadius:12,border:'none',cursor:'pointer',background:dark?'rgba(255,255,255,0.1)':'rgba(255,255,255,0.7)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:4,flexShrink:0 }}>
+      <span style={{ display:'block',width:16,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
+      <span style={{ display:'block',width:12,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
+      <span style={{ display:'block',width:16,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
+    </button>
+  );
+}
+
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const { dark, toggle } = useTheme();
@@ -22,35 +32,42 @@ export default function Sidebar() {
   const bg = dark ? '#0d1b3e' : '#fff';
   const txt = dark ? '#fff' : '#1a237e';
   const sub = dark ? 'rgba(255,255,255,0.4)' : '#78909c';
-  const border = dark ? 'rgba(255,255,255,0.08)' : 'rgba(21,101,192,0.1)';
+  const borderC = dark ? 'rgba(255,255,255,0.08)' : 'rgba(21,101,192,0.1)';
 
   return (
     <>
-      {/* Hamburger button — ditaruh di HomeClient/Navbar */}
-      <button onClick={() => setOpen(true)} style={{ width:40,height:40,borderRadius:12,border:'none',cursor:'pointer',background:dark?'rgba(255,255,255,0.1)':'rgba(255,255,255,0.7)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:5 }}>
-        <span style={{ display:'block',width:18,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
-        <span style={{ display:'block',width:14,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
-        <span style={{ display:'block',width:18,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
-      </button>
+      <HamburgerBtn onClick={() => setOpen(true)} dark={dark} />
 
       {/* Overlay */}
-      {open && <div onClick={() => setOpen(false)} style={{ position:'fixed',inset:0,background:'rgba(0,0,0,0.5)',zIndex:998,backdropFilter:'blur(4px)' }} />}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          style={{ position:'fixed',inset:0,background:'rgba(0,0,0,0.55)',zIndex:9998,backdropFilter:'blur(3px)',WebkitBackdropFilter:'blur(3px)' }}
+        />
+      )}
 
       {/* Sidebar panel */}
-      <div style={{ position:'fixed',top:0,left:0,height:'100%',width:280,background:bg,zIndex:999,transform:open?'translateX(0)':'translateX(-100%)',transition:'transform 0.3s cubic-bezier(.4,0,.2,1)',boxShadow:open?'4px 0 40px rgba(0,0,0,0.3)':'none',display:'flex',flexDirection:'column',overflowY:'auto' }}>
+      <div style={{
+        position:'fixed', top:0, left:0, height:'100%', width:285,
+        background:bg, zIndex:9999,
+        transform: open ? 'translateX(0)' : 'translateX(-100%)',
+        transition:'transform 0.3s cubic-bezier(.4,0,.2,1)',
+        boxShadow: open ? '8px 0 40px rgba(0,0,0,0.25)' : 'none',
+        display:'flex', flexDirection:'column', overflowY:'auto',
+      }}>
 
         {/* Header */}
-        <div style={{ padding:'56px 20px 20px',borderBottom:`1px solid ${border}` }}>
+        <div style={{ padding:'56px 20px 20px', borderBottom:`1px solid ${borderC}` }}>
           <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16 }}>
-            <h2 style={{ fontSize:22,fontWeight:900,color:txt }}>Nzwx<span style={{ color:'#1565c0' }}>Film</span></h2>
-            <button onClick={() => setOpen(false)} style={{ width:32,height:32,borderRadius:8,border:'none',cursor:'pointer',background:dark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.06)',display:'flex',alignItems:'center',justifyContent:'center' }}>
+            <h2 style={{ fontSize:22,fontWeight:900,color:txt }}>
+              Nzwx<span style={{ color:'#1565c0' }}>Film</span>
+            </h2>
+            <button onClick={() => setOpen(false)} style={{ width:32,height:32,borderRadius:8,border:'none',cursor:'pointer',background:dark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.06)',display:'flex',alignItems:'center',justifyContent:'center' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={txt} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
-
-          {/* About */}
-          <div style={{ background:dark?'rgba(255,255,255,0.06)':'rgba(21,101,192,0.06)',borderRadius:14,padding:'12px 14px',border:`1px solid ${border}` }}>
-            <p style={{ fontSize:12,color:sub,lineHeight:1.7 }}>Platform streaming film & series online gratis. Tonton ribuan judul dengan kualitas terbaik tanpa batas.</p>
+          <div style={{ background:dark?'rgba(255,255,255,0.05)':'rgba(21,101,192,0.05)',borderRadius:14,padding:'12px 14px',border:`1px solid ${borderC}` }}>
+            <p style={{ fontSize:12,color:sub,lineHeight:1.8 }}>Platform streaming film & series online gratis. Tonton ribuan judul dengan kualitas terbaik tanpa batas.</p>
           </div>
         </div>
 
@@ -61,19 +78,19 @@ export default function Sidebar() {
             const active = path === m.href;
             return (
               <a key={m.href} href={m.href} onClick={() => setOpen(false)} style={{ display:'flex',alignItems:'center',gap:12,padding:'11px 12px',borderRadius:14,marginBottom:4,textDecoration:'none',background:active?'#1565c0':'transparent',color:active?'#fff':txt,transition:'all 0.15s' }}>
-                <span style={{ opacity:active?1:0.7 }}>{m.icon}</span>
+                <span style={{ opacity:active?1:0.65, color: active?'#fff':txt }}>{m.icon}</span>
                 <span style={{ fontSize:14,fontWeight:active?700:500 }}>{m.label}</span>
-                {active && <div style={{ marginLeft:'auto',width:6,height:6,borderRadius:'50%',background:'rgba(255,255,255,0.8)' }} />}
+                {active && <div style={{ marginLeft:'auto',width:6,height:6,borderRadius:'50%',background:'rgba(255,255,255,0.7)' }} />}
               </a>
             );
           })}
         </div>
 
-        {/* Developer info */}
-        <div style={{ padding:'16px 20px 32px',borderTop:`1px solid ${border}` }}>
-          <div style={{ display:'flex',alignItems:'center',gap:12,marginBottom:14 }}>
-            <div style={{ width:40,height:40,borderRadius:12,background:'linear-gradient(135deg,#1565c0,#4fc3f7)',display:'flex',alignItems:'center',justifyContent:'center' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        {/* Developer + Dark toggle */}
+        <div style={{ padding:'16px 20px 36px',borderTop:`1px solid ${borderC}` }}>
+          <div style={{ display:'flex',alignItems:'center',gap:12,marginBottom:12 }}>
+            <div style={{ width:40,height:40,borderRadius:12,background:'linear-gradient(135deg,#1565c0,#4fc3f7)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
             </div>
             <div>
               <p style={{ fontSize:13,fontWeight:700,color:txt }}>Egii</p>
@@ -82,8 +99,8 @@ export default function Sidebar() {
           </div>
           <p style={{ fontSize:11,color:sub,lineHeight:1.7,marginBottom:14 }}>NzwxFilm dibuat oleh Egii sebagai platform hiburan streaming film & series gratis untuk semua orang.</p>
 
-          {/* Dark mode toggle */}
-          <button onClick={toggle} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'10px 14px',borderRadius:12,border:`1px solid ${border}`,background:'transparent',cursor:'pointer',color:txt }}>
+          {/* Dark mode */}
+          <button onClick={toggle} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'11px 14px',borderRadius:12,border:`1px solid ${borderC}`,background:dark?'rgba(255,255,255,0.06)':'rgba(21,101,192,0.05)',cursor:'pointer',color:txt,fontFamily:'Inter,sans-serif' }}>
             {dark ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             ) : (
