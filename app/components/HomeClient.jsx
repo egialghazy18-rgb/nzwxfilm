@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { usePathname } from 'next/navigation';
@@ -56,7 +57,28 @@ export default function HomeClient({ trending, movies, series }) {
   const { dark, toggle } = useTheme();
   const [cont] = useLocalStorage('continue_watching', []);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const [installed, setInstalled] = useState(false);
   const path = usePathname();
+
+  useEffect(() => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if (isStandalone) { setInstalled(true); return; }
+    const handler = (e) => { e.preventDefault(); setInstallPrompt(e); };
+    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', () => setInstalled(true));
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (installPrompt) {
+      installPrompt.prompt();
+      const result = await installPrompt.userChoice;
+      if (result.outcome === 'accepted') { setInstalled(true); setInstallPrompt(null); }
+    } else {
+      alert('Buka menu Chrome (titik 3) > "Tambahkan ke layar utama"');
+    }
+  };
 
   const bg = dark
     ? 'linear-gradient(180deg,#0a0a1a 0%,#0d1b3e 50%,#0a0a1a 100%)'
@@ -71,7 +93,6 @@ export default function HomeClient({ trending, movies, series }) {
 
   return (
     <>
-      {/* SIDEBAR OVERLAY — di luar semua, langsung di root */}
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
@@ -79,7 +100,6 @@ export default function HomeClient({ trending, movies, series }) {
         />
       )}
 
-      {/* SIDEBAR PANEL */}
       <div style={{
         position:'fixed',top:0,left:0,height:'100dvh',width:285,
         background:sideBg,zIndex:9999,
@@ -113,6 +133,21 @@ export default function HomeClient({ trending, movies, series }) {
               </a>
             );
           })}
+
+          {/* Install PWA di daftar menu */}
+          {installed ? (
+            <div style={{ display:'flex',alignItems:'center',gap:12,padding:'11px 12px',borderRadius:14,marginBottom:4 }}>
+              <span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span style={{ fontSize:14,fontWeight:500,color:'#4caf50' }}>Sudah Terinstall</span>
+            </div>
+          ) : (
+            <button onClick={handleInstall} style={{ display:'flex',alignItems:'center',gap:12,padding:'11px 12px',borderRadius:14,marginBottom:4,width:'100%',border:'none',background:'transparent',color:sideTxt,cursor:'pointer',fontFamily:'inherit',transition:'all 0.15s',textAlign:'left' }}>
+              <span style={{ opacity:0.65 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </span>
+              <span style={{ fontSize:14,fontWeight:500 }}>Install PWA</span>
+            </button>
+          )}
         </div>
 
         <div style={{ padding:'16px 20px 36px',borderTop:`1px solid ${sideBorder}` }}>
@@ -148,7 +183,6 @@ export default function HomeClient({ trending, movies, series }) {
             <a href="/search" style={{ width:40,height:40,borderRadius:12,background:dark?'rgba(255,255,255,0.1)':'rgba(255,255,255,0.7)',border:dark?'1px solid rgba(255,255,255,0.15)':'1px solid rgba(255,255,255,0.9)',display:'flex',alignItems:'center',justifyContent:'center',textDecoration:'none' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={dark?'#4fc3f7':'#1565c0'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </a>
-            {/* Hamburger */}
             <button onClick={() => setSidebarOpen(true)} style={{ width:40,height:40,borderRadius:12,border:'none',cursor:'pointer',background:dark?'rgba(255,255,255,0.1)':'rgba(255,255,255,0.7)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:4 }}>
               <span style={{ display:'block',width:16,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
               <span style={{ display:'block',width:12,height:2,borderRadius:2,background:dark?'#fff':'#1565c0' }} />
