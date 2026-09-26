@@ -10,9 +10,18 @@ function getSession() {
   } catch { return 'anon'; }
 }
 
+function isAdmin() {
+  try { return localStorage.getItem('dev_auth') === '1'; } catch { return false; }
+}
+
 export function TrackVisitor({ page = '/' }) {
   useEffect(() => {
-    supabase.from('visitors').insert({ session_id: getSession(), page }).then(() => {});
+    if (isAdmin()) {
+      // Admin masuk — catat sebagai event admin, bukan pengunjung biasa
+      supabase.from('admin_activity').insert({ session_id: getSession(), page, action: 'visit' }).then(() => {});
+    } else {
+      supabase.from('visitors').insert({ session_id: getSession(), page }).then(() => {});
+    }
   }, [page]);
   return null;
 }
