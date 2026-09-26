@@ -9,11 +9,15 @@ export default async function TrendingPage() {
   return (
     <main style={{
       minHeight: '100vh',
+      width: '100%',
+      maxWidth: '100vw',
+      overflowX: 'hidden',
+      boxSizing: 'border-box',
       background: 'linear-gradient(180deg, #dff0fc 0%, #a8d4f5 20%, #5aaee0 50%, #1a6bb5 75%, #0b3270 100%)',
     }}>
 
       {/* HEADER */}
-      <div style={{ padding:'100px 20px 28px', position:'relative', overflow:'hidden' }}>
+      <div style={{ padding:'100px 20px 28px', position:'relative', overflow:'hidden', boxSizing:'border-box' }}>
         <div style={{ position:'absolute', top:-20, right:-30, width:180, height:180, borderRadius:'50%', background:'rgba(21,101,192,0.25)', filter:'blur(50px)', pointerEvents:'none' }} />
 
         <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:8 }}>
@@ -45,19 +49,25 @@ export default async function TrendingPage() {
         </div>
       </div>
 
-      {/* GRID 2 kolom seragam */}
-      <div style={{ padding:'0 14px 100px' }}>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+      {/* GRID — pakai calc biar pas */}
+      <div style={{ width:'100%', boxSizing:'border-box', padding:'0 14px 100px' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'calc(50% - 6px) calc(50% - 6px)',
+          gap: 12,
+          width: '100%',
+        }}>
           {films.map((f, idx) => (
-            <a key={f.id} href={`/watch/${f.id}`} style={{ textDecoration:'none' }}>
+            <a key={f.id} href={`/watch/${f.id}`} style={{ textDecoration:'none', minWidth:0 }}>
               <div style={{
                 borderRadius: 14,
                 overflow: 'hidden',
                 background: 'rgba(255,255,255,0.88)',
                 boxShadow: '0 3px 14px rgba(0,0,0,0.12)',
                 border: '1px solid rgba(255,255,255,0.9)',
+                width: '100%',
               }}>
-                <div style={{ position:'relative', aspectRatio:'2/3' }}>
+                <div style={{ position:'relative', aspectRatio:'2/3', width:'100%' }}>
                   {f.poster_path
                     ? <img src={`${IMG}${f.poster_path}`} alt={f.title||f.name} style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
                     : <div style={{ width:'100%', height:'100%', background:'#1a237e', display:'flex', alignItems:'center', justifyContent:'center' }}>
