@@ -172,7 +172,7 @@ export default function HomeClient({ trending, movies, series }) {
         <div style={{ position:'sticky', top:0, zIndex:100, background:navBg, backdropFilter:'blur(20px)', WebkitBackdropFilter:'blur(20px)', borderBottom:dark?'1px solid rgba(255,255,255,0.08)':'1px solid rgba(255,255,255,0.6)', padding:'48px 16px 14px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div>
             {/* Navbar: hilangkan "Selamat datang di", ganti jadi tagline cinematic */}
-            <p style={{ fontSize:10, fontWeight:700, color:'#4fc3f7', letterSpacing:'2px', textTransform:'uppercase', marginBottom:2 }}>🎬 Streaming Gratis</p>
+            <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:2 }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4fc3f7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg><p style={{ fontSize:10, fontWeight:700, color:'#4fc3f7', letterSpacing:'2px', textTransform:'uppercase', margin:0 }}>Streaming Gratis</p></div>
             <h1 style={{ fontSize:22, fontWeight:900, color:navTxt, letterSpacing:'-0.5px', lineHeight:1 }}>Nzwx<span style={{ color:'#1565c0' }}>Film</span></h1>
           </div>
           <div style={{ display:'flex', gap:8, alignItems:'center' }}>
