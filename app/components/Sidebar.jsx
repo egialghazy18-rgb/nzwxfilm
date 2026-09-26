@@ -116,8 +116,13 @@ export default function Sidebar() {
           <p style={{ fontSize:11,color:sub,lineHeight:1.7,marginBottom:14 }}>NzwxFilm dibuat oleh Egii sebagai platform hiburan streaming film & series gratis untuk semua orang.</p>
 
           {/* Install PWA */}
-          {!installed && (
-            <button onClick={handleInstall} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'11px 14px',borderRadius:12,border:'1px solid rgba(21,101,192,0.3)',background:'linear-gradient(135deg,rgba(21,101,192,0.1),rgba(79,195,247,0.1))',cursor:'pointer',color:txt,fontFamily:'Inter,sans-serif',marginBottom:8 }}>
+          {installed ? (
+            <div style={{ display:'flex',alignItems:'center',gap:8,padding:'8px 14px',borderRadius:12,background:'rgba(76,175,80,0.1)',marginBottom:8 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span style={{ fontSize:12,color:'#4caf50',fontWeight:600 }}>Sudah terinstall</span>
+            </div>
+          ) : (
+            <button onClick={installPrompt ? handleInstall : () => alert('Buka di Chrome > menu titik 3 > Tambahkan ke layar utama')} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'11px 14px',borderRadius:12,border:'1px solid rgba(21,101,192,0.3)',background:'linear-gradient(135deg,rgba(21,101,192,0.1),rgba(79,195,247,0.1))',cursor:'pointer',color:txt,fontFamily:'Inter,sans-serif',marginBottom:8 }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1565c0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               <div style={{ textAlign:'left' }}>
                 <p style={{ fontSize:13,fontWeight:700,color:'#1565c0',margin:0 }}>Install PWA</p>
@@ -130,6 +135,7 @@ export default function Sidebar() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               <span style={{ fontSize:12,color:'#4caf50',fontWeight:600 }}>Sudah terinstall</span>
             </div>
+          )}
           )}
           {/* Dark mode */}
           <button onClick={toggle} style={{ display:'flex',alignItems:'center',gap:10,width:'100%',padding:'11px 14px',borderRadius:12,border:`1px solid ${borderC}`,background:dark?'rgba(255,255,255,0.06)':'rgba(21,101,192,0.05)',cursor:'pointer',color:txt,fontFamily:'Inter,sans-serif' }}>
