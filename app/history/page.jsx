@@ -59,7 +59,7 @@ export default function HistoryPage() {
         if (!date) return false;
         const yr = new Date(date).getFullYear();
         // Hanya yang belum rilis (>= hari ini) dan tahun 2026-2027
-        return date >= todayStr && yr >= 2026 && yr <= 2027;
+        return date > todayStr && yr >= 2026 && yr <= 2027;
       })
       .sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
 
