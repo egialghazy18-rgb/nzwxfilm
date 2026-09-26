@@ -19,7 +19,7 @@ export default function HeroSlider({ films }) {
 
   return (
     <div
-      style={{ borderRadius: 20, overflow: 'hidden', position: 'relative', aspectRatio: '16/7', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', isolation: 'isolate' }}
+      style={{ borderRadius: 20, overflow: 'hidden', position: 'relative', aspectRatio: '16/7', boxShadow: '0 12px 48px rgba(0,0,0,0.5)', isolation: 'isolate' }}
       onTouchStart={e => { touchStartX.current = e.touches[0].clientX; }}
       onTouchEnd={e => {
         if (touchStartX.current === null) return;
@@ -31,28 +31,57 @@ export default function HeroSlider({ films }) {
         touchStartX.current = null;
       }}
     >
+      {/* Background Image */}
       <img
         src={hero.backdrop}
         alt={hero.title}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: fade ? 1 : 0, transition: 'opacity 0.3s ease', display: 'block', position: 'absolute', inset: 0 }}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: fade ? 1 : 0, transition: 'opacity 0.4s ease', display: 'block', position: 'absolute', inset: 0 }}
       />
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.1) 60%)', zIndex: 1 }} />
+
+      {/* Cinematic gradient — bottom + left */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.05) 100%)', zIndex: 1 }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.6) 0%, transparent 60%)', zIndex: 1 }} />
 
       {/* Counter */}
-      <div style={{ position: 'absolute', top: 10, right: 12, zIndex: 2, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)', borderRadius: 8, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#fff' }}>{current + 1}/{films.length}</div>
+      <div style={{ position: 'absolute', top: 10, right: 12, zIndex: 3, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)', borderRadius: 8, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#fff', letterSpacing: '0.5px' }}>
+        {current + 1}/{films.length}
+      </div>
 
-      <div style={{ position: 'absolute', bottom: 12, left: 14, right: 14, zIndex: 2 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 800, color: '#fff', letterSpacing: '-0.3px', marginBottom: 4, opacity: fade ? 1 : 0, transition: 'opacity 0.3s ease' }}>{hero.title}</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>★ {hero.rating?.toFixed(1)}</span>
-          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>{hero.release_date?.slice(0,4)}</span>
-          <span style={{ fontSize: 9, fontWeight: 800, background: '#e50914', color: '#fff', padding: '2px 6px', borderRadius: 4 }}>HD</span>
+      {/* Content */}
+      <div style={{ position: 'absolute', bottom: 14, left: 14, right: 14, zIndex: 2, opacity: fade ? 1 : 0, transition: 'opacity 0.4s ease' }}>
+
+        {/* Genre label */}
+        <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 4 }}>
+          🎬 Featured
         </div>
+
+        {/* Title — lebih besar & bold */}
+        <h2 style={{ fontSize: 22, fontWeight: 900, color: '#fff', letterSpacing: '-0.5px', marginBottom: 6, lineHeight: 1.1, textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
+          {hero.title}
+        </h2>
+
+        {/* Meta */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <span style={{ fontSize: 12, color: '#FFD700', fontWeight: 700 }}>★ {hero.rating?.toFixed(1)}</span>
+          <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'rgba(255,255,255,0.4)', display: 'inline-block' }} />
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>{hero.release_date?.slice(0,4)}</span>
+          <span style={{ fontSize: 9, fontWeight: 800, background: 'linear-gradient(135deg, #e50914, #b00710)', color: '#fff', padding: '2px 7px', borderRadius: 4, letterSpacing: '0.5px' }}>HD</span>
+        </div>
+
+        {/* Actions */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <a href={`/watch/${hero.id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '7px 16px', background: '#fff', borderRadius: 100, color: '#000', fontWeight: 700, fontSize: 12 }}>▶ Tonton</a>
-          <div style={{ display: 'flex', gap: 5 }}>
+          <a href={`/watch/${hero.id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 20px', background: '#fff', borderRadius: 100, color: '#000', fontWeight: 800, fontSize: 12, letterSpacing: '0.2px', boxShadow: '0 4px 16px rgba(255,255,255,0.25)' }}>
+            ▶ Tonton
+          </a>
+
+          {/* Dots */}
+          <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
             {films.map((_, i) => (
-              <div key={i} onClick={() => { setFade(false); setTimeout(() => { setCurrent(i); setFade(true); }, 200); }} style={{ width: i === current ? 16 : 5, height: 5, borderRadius: 3, background: i === current ? '#fff' : 'rgba(255,255,255,0.4)', transition: 'all 0.3s', cursor: 'pointer' }} />
+              <div
+                key={i}
+                onClick={() => { setFade(false); setTimeout(() => { setCurrent(i); setFade(true); }, 200); }}
+                style={{ width: i === current ? 18 : 5, height: 5, borderRadius: 3, background: i === current ? '#fff' : 'rgba(255,255,255,0.35)', transition: 'all 0.3s', cursor: 'pointer' }}
+              />
             ))}
           </div>
         </div>
